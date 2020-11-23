@@ -1,16 +1,17 @@
+// React
 import React from "react";
 
+// Redux
+import { connect } from "react-redux";
+
+// Ant Design组件 & css
 import 'antd/dist/antd.css';
-import './DPHeader.css';
 import { Layout } from 'antd';
+import './DPHeader.css';
 
 const { Header } = Layout;
 
 class DPHeader extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (
@@ -20,6 +21,13 @@ class DPHeader extends React.Component {
             </Header>
         )
     }
+
 }
 
-export default DPHeader;
+const mapStateToProps = (state) => {
+    return {
+        headerTitle: state.header.title
+    }
+}
+
+export default connect(mapStateToProps, null)(DPHeader);

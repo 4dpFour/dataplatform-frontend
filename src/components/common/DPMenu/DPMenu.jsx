@@ -1,4 +1,8 @@
+// React
 import React from 'react';
+import { Link } from "react-router-dom";
+
+// Ant Design组件库 & css
 import 'antd/dist/antd.css';
 import './DPMenu.css';
 import { Menu, Layout } from 'antd';
@@ -9,6 +13,13 @@ import {
     UserOutlined,
 } from '@ant-design/icons';
 
+// Redux
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
+// Redux Action
+import * as headerActions from "../../../redux/actions/header";
+
 const { Sider } = Layout;
 
 class DPMenu extends React.Component {
@@ -16,19 +27,23 @@ class DPMenu extends React.Component {
     menuItems = [
         {
             title: "数据看板",
-            icon: <PieChartOutlined />
+            icon: <PieChartOutlined />,
+            link: '/dashboard'
         },
         {
             title: "数据列表",
-            icon: <BarChartOutlined />
+            icon: <BarChartOutlined />,
+            link: '/table'
         },
         {
             title: "网址配置",
-            icon: <FileOutlined />
+            icon: <FileOutlined />,
+            link: '/urlconfig'
         },
         {
             title: "个人中心",
-            icon: <UserOutlined />
+            icon: <UserOutlined />,
+            link: '/mine'
         },
     ]
 
@@ -42,27 +57,20 @@ class DPMenu extends React.Component {
         }
     }
 
-    // 组件装载完毕后执行这个方法
-    componentDidMount() {
-        this.setState({
-            itemTitle: this.props.menuItemTitle
-        })
-    }
-
-    // 当收起侧栏触发这个回调
+    // 当收起侧栏时触发这个回调
     onCollapse = (collapsed) => {
         this.setState({
             collapsed: collapsed
         });
     };
 
-    // 当click侧栏item触发这个回调
+    // 当点击item上课触发这个回调
     onClickMenuItem = ({ item, key, keyPath, domEvent }) => {
         this.setState({
             itemTitle: key
-        })
-        // 传递数据到父组件
-        this.props.onTitleChanged(key);
+        });
+
+        this.props.headerActions.changeHeaderTitle(key);
     }
 
     render() {
@@ -79,7 +87,8 @@ class DPMenu extends React.Component {
                         this.menuItems.map(item => {
                             return (
                                 <Menu.Item key={item.title} icon={item.icon}>
-                                    {item.title}
+                                    {/* 链接 */}
+                                    <Link to={item.link}>{item.title}</Link>
                                 </Menu.Item>
                             )
                         })
@@ -91,4 +100,10 @@ class DPMenu extends React.Component {
 
 }
 
-export default DPMenu;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        headerActions: bindActionCreators(headerActions, dispatch)
+    }
+}
+
+export default connect(null, mapDispatchToProps)(DPMenu);
