@@ -11,7 +11,7 @@ import MinePage from "./components/Mine/MinePage";
 export default (
     <div className='container'>
         {/* 重定位 */}
-        <Redirect from="/" to="/dashboard"></Redirect>
+        <Redirect exact strict from="/" to="/dashboard"></Redirect>
         <Route exact path='/dashboard' component={DashboardPage}></Route>
         <Route exact path='/table' component={TablePage}></Route>
         <Route exact path='/urlconfig' component={UrlConfigPage}></Route>

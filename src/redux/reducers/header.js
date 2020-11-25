@@ -7,7 +7,7 @@ const initialState = {
 }
 
 // reducer
-const header = (state = initialState, action) => {
+const headerReducer = (state = initialState, action) => {
     switch (action.type) {
         case HeaderAction.CHANGE_HEADER_TITLE:
             return {
@@ -19,4 +19,4 @@ const header = (state = initialState, action) => {
     }
 }
 
-export default header;
+export default headerReducer;
