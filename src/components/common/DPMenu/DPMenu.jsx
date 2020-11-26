@@ -1,6 +1,6 @@
 // React
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 // Ant Design组件库 & css
 import 'antd/dist/antd.css';
@@ -19,6 +19,9 @@ import { bindActionCreators } from "redux";
 
 // Redux Action
 import * as headerActions from "../../../redux/actions/header";
+
+// Util
+import { findIndex } from 'lodash';
 
 const { Sider } = Layout;
 
@@ -55,6 +58,17 @@ class DPMenu extends React.Component {
             collapsed: false,
             itemTitle: '数据看板'
         }
+
+        // ---------- 监听路由 ----------
+        this.props.history.listen(route => {
+            let targetIndex = findIndex(this.menuItems, { link: route.pathname });
+
+            if (targetIndex != -1) {
+                this.setState({ itemTitle: this.menuItems[targetIndex].title });
+            } else {
+                this.setState({ itemTitle: '数据看板' });
+            }
+        });
     }
 
     // 当收起侧栏时触发这个回调
@@ -74,7 +88,7 @@ class DPMenu extends React.Component {
     }
 
     render() {
-        const { collapsed } = this.state;
+        const { collapsed, itemTitle } = this.state;
 
         return (
             <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
@@ -82,7 +96,12 @@ class DPMenu extends React.Component {
                     <span className="frontTitle">数据</span>
                     <span className="behindTitle">平台</span>
                 </div>
-                <Menu theme="dark" defaultSelectedKeys={[this.state.itemTitle]} mode="inline" onClick={this.onClickMenuItem}>
+                <Menu
+                    theme="dark"
+                    mode="inline"
+                    defaultSelectedKeys={[itemTitle]}
+                    selectedKeys={[this.state.itemTitle]}
+                    onClick={this.onClickMenuItem}>
                     {
                         this.menuItems.map(item => {
                             return (
@@ -106,4 +125,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(DPMenu);
+export default withRouter(connect(null, mapDispatchToProps)(DPMenu));
