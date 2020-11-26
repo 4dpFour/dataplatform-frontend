@@ -5,10 +5,15 @@ const ActionType = {
     },
     // 数据列表相关
     dataTable: {
+        // 数据操作相关
         FETCH_DATA: 'FETCH_DATA',
         FETCH_MOCK_DATA: 'FETCH_MOCK_DATA',
         ADD_ROW: 'ADD_ROW',
-        DELETE_ROWS: 'DELETE_ROWS'
+        UPDATE_ROW: 'UPDATE_ROW',
+        DELETE_ROWS: 'DELETE_ROWS',
+        // 表格样式相关
+        TOGGLE_BORDER: 'TOGGLE_BORDER',
+        TOGGLE_LAYOUT: 'TOGGLE_LAYOUT'
     }
 }
 

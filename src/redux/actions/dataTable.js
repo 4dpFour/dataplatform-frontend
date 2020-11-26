@@ -26,10 +26,34 @@ export const addRow = (data) => {
     }
 }
 
+// Action: 更新行
+export const updateRow = (selectedRowKey, data) => {
+    return {
+        type: DataTableAction.UPDATE_ROW,
+        selectedRowKey, data
+    }
+}
+
 // Action: 删除行
 export const deleteRows = (selectedRowKeys) => {
     return {
         type: DataTableAction.DELETE_ROWS,
         selectedRowKeys
+    }
+}
+
+// Action: 切换表格边框状态
+export const toggleBorder = (bordered) => {
+    return {
+        type: DataTableAction.TOGGLE_BORDER,
+        bordered
+    }
+}
+
+// Action: 选择表格布局
+export const toggleLayout = (layout) => {
+    return {
+        type: DataTableAction.TOGGLE_LAYOUT,
+        layout
     }
 }

@@ -15,6 +15,9 @@ import { Table, Switch, Radio, Form, Button, Modal } from 'antd';
 // 组件
 import InfoEditor from './InfoEditor';
 
+// Util
+import { findIndex } from 'lodash';
+
 const columns = [
     { title: '合同编号', dataIndex: 'contractNo' },
     { title: '合同名称', dataIndex: 'contractName' },
@@ -27,7 +30,7 @@ const columns = [
     { title: '主要标的名称', dataIndex: 'subjectName' },
     { title: '主要标的单价', dataIndex: 'subjectUnitPrice' },
     { title: '合同金额', dataIndex: 'contractValue' },
-    { title: '合同公告日期', dataIndex: 'announceDate' },
+    { title: '合同公告日期', dataIndex: 'announceDate' }
 ]
 
 class DataTable extends React.Component {
@@ -37,55 +40,59 @@ class DataTable extends React.Component {
 
         this.state = {
             // 表格相关
-            bordered: false,
-            expandable: this.expandable,
-            scroll: { x: '200vw' },
-            hasData: true,
-            tableLayout: 'fixed',
             selectedRowKeys: [],
             rowNumber: 0,
             // button相关
+            addButtonDisabled: false,
             deleteButtonDisabled: true,
+            editRowButtonDisabled: true,
+            // 提示框相关
             deleteRowsConfirmationVisible: false,
-            infoEditorVisible: false
-        };
-
-        // 展开后的内容
-        this.expandable = {
-            expandedRowRender: item => {
-                return (
-                    <div>
-                        <Button type='primary'>编辑此行</Button>
-                    </div>
-
-                )
-            }
+            infoEditorVisible: false,
+            selectedRowData: {}
         };
 
         // 选中行时触发
         this.rowSelection = {
             onChange: (selectedRowKeys) => {
+                let addButtonDisabled = true;
                 let deleteButtonDisabled = true;
+                let editRowButtonDisabled = true;
+                let selectedRowData = {};
+
                 // 按钮是否可以点击
-                deleteButtonDisabled = selectedRowKeys.length == 0 ? true : false;
+                addButtonDisabled = selectedRowKeys.length === 0 ? false : true;
+                deleteButtonDisabled = selectedRowKeys.length === 0 ? true : false;
+                editRowButtonDisabled = selectedRowKeys.length === 1 ? false : true;
+
+                // 
+                const selectedRowKey = selectedRowKeys.length === 1 ? selectedRowKeys[0] : -1;
+                if (selectedRowKey !== -1) {
+                    const targetIndex = findIndex(this.props.dataSource, { id: selectedRowKey });
+                    selectedRowData = this.props.dataSource[targetIndex];
+                }
+
+                // 更新状态
                 this.setState({
-                    deleteButtonDisabled, selectedRowKeys
-                })
+                    selectedRowKeys,
+                    addButtonDisabled,
+                    deleteButtonDisabled,
+                    editRowButtonDisabled,
+                    selectedRowData
+                });
             }
         }
+
     }
 
-    // 组件加载后执行这个回调
-    componentDidMount() { }
-
-    // 切换边框状态
-    handleToggle = prop => enable => {
-        this.setState({ [prop]: enable });
-    };
+    toggleBorder = () => {
+        const bordered = this.props.bordered;
+        this.props.dataTableActions.toggleBorder(!bordered);
+    }
 
     // 切换表格布局
     handleTableLayoutChange = e => {
-        this.setState({ tableLayout: e.target.value });
+        this.props.dataTableActions.toggleLayout(e.target.value);
     };
 
     // 添加行
@@ -94,7 +101,19 @@ class DataTable extends React.Component {
         this.setState({ infoEditorVisible: true });
     }
 
-    // 子组件会调用这个回调
+    // 编辑行
+    onClickEditRowButton = () => {
+        // 弹出编辑框
+        this.setState({ infoEditorVisible: true });
+    }
+
+    updateSelectedRowData = (data) => {
+        this.setState({
+            selectedRowData: data
+        })
+    }
+
+    // 设置弹出框的可视状态
     handleInfoEditorVisible = (visible) => {
         this.setState({ infoEditorVisible: visible })
     }
@@ -115,13 +134,17 @@ class DataTable extends React.Component {
             rowNumber: currentRowNumber,
             selectedRowKeys: [],
             // 当前没有数据或未选中行
-            deleteButtonDisabled: currentRowNumber == 0 || selectedRowKeys.length
+            deleteButtonDisabled: currentRowNumber === 0 || selectedRowKeys.length,
+            addButtonDisabled: false
         })
     }
 
     // 确认删除行
     handleDeleteRowsOK = () => {
-        this.setState({ deleteRowsConfirmationVisible: false });
+        this.setState({
+            deleteRowsConfirmationVisible: false,
+            editRowButtonDisabled: true
+        });
         this.deleteRows(this.state.selectedRowKeys);
     }
 
@@ -131,7 +154,8 @@ class DataTable extends React.Component {
     }
 
     render() {
-        const state = this.state;
+        const { addButtonDisabled, editRowButtonDisabled, deleteButtonDisabled } = this.state;
+        const { bordered } = this.props;
 
         const dataSource = this.props.dataSource.map(contract => {
             return {
@@ -139,7 +163,7 @@ class DataTable extends React.Component {
                 key: contract.id,
                 ...contract
             }
-        })
+        });
         const tableColumns = columns.map(item => ({ ...item, align: 'center' }));
 
         return (
@@ -150,11 +174,11 @@ class DataTable extends React.Component {
                     className="components-table-demo-control-bar"
                     style={{ marginBottom: 16, marginLeft: 16, marginRight: 16 }}>
                     <Form.Item label="边框">
-                        <Switch checked={state.bordered} onChange={this.handleToggle('bordered')} />
+                        <Switch checked={bordered} onChange={this.toggleBorder} />
                     </Form.Item>
 
                     <Form.Item label="表格布局">
-                        <Radio.Group value={state.tableLayout} onChange={this.handleTableLayoutChange}>
+                        <Radio.Group value={this.props.layout} onChange={this.handleTableLayoutChange}>
                             <Radio.Button value={undefined}>默认</Radio.Button>
                             <Radio.Button value='fixed'>固定</Radio.Button>
                         </Radio.Group>
@@ -163,22 +187,31 @@ class DataTable extends React.Component {
                     <Form.Item>
                         <Button
                             type='primary'
-                            disabled={this.state.deleteButtonDisabled}
-                            style={{ marginRight: 5 }}
+                            disabled={addButtonDisabled}
+                            onClick={this.onClickAddRowButton}>
+                            添加
+                        </Button>
+                        <Button
+                            type='primary'
+                            disabled={deleteButtonDisabled}
+                            style={{ marginLeft: 5 }}
                             onClick={this.onClickDeleteRowsButton}>
                             删除
                         </Button>
                         <Button
                             type='primary'
-                            onClick={this.onClickAddRowButton}>
-                            添加
+                            disabled={editRowButtonDisabled}
+                            onClick={this.onClickEditRowButton}
+                            style={{ marginLeft: 4 }}>
+                            编辑
                         </Button>
                     </Form.Item>
 
                     <Form.Item>
                         <Button
                             type='default'
-                            style={{ marginRight: 5 }}>
+                            style={{ marginRight: 5 }}
+                            disabled={true}>
                             保存
                         </Button>
                         <Button
@@ -190,12 +223,13 @@ class DataTable extends React.Component {
 
                 {/* Table */}
                 <Table
-                    {...this.state}
-                    expandable={this.expandable}
+                    bordered={this.props.bordered}
+                    tableLayout={this.props.layout}
+                    pagination={{ pageSize: 20 }}
+                    scroll={{ x: '200vw' }}
                     rowSelection={this.rowSelection}
                     columns={tableColumns}
-                    dataSource={state.hasData ? dataSource : null}
-                    scroll={state.scroll}
+                    dataSource={dataSource}
                 />
 
                 {/* 删除行提示框 */}
@@ -211,7 +245,10 @@ class DataTable extends React.Component {
                 {/* 添加行提示框 */}
                 <InfoEditor
                     visible={this.state.infoEditorVisible}
-                    handleVisibility={this.handleInfoEditorVisible} />
+                    handleVisibility={this.handleInfoEditorVisible}
+                    selectedRowKey={this.state.selectedRowKeys.length != 1 ? -1 : this.state.selectedRowKeys[0]}
+                    selectedRowData={this.state.selectedRowData}
+                    updateSelectedRowData={this.updateSelectedRowData} />
             </div >
         );
     }
@@ -219,7 +256,9 @@ class DataTable extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        dataSource: state.dataTable.dataSource
+        dataSource: state.dataTable.dataSource,
+        bordered: state.dataTable.bordered,
+        layout: state.dataTable.layout
     }
 }
 

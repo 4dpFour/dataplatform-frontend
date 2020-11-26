@@ -13,8 +13,7 @@ export const contracts = [
         subjectName: "电子签章应用",
         subjectUnitPrice: 798800,
         contractValue: 798800,
-        announceDate: "2020-11-24",
-        description: "我是一个段落"
+        announceDate: "2020-11-24"
     },
     {
         id: 2,
@@ -29,8 +28,7 @@ export const contracts = [
         subjectName: "贵州法院诉讼服务综合管理平台",
         subjectUnitPrice: 2460000.00,
         contractValue: 2460000.00,
-        announceDate: "2020-12-10",
-        description: "我是一个段落"
+        announceDate: "2020-12-10"
     },
     {
         id: 3,
@@ -45,8 +43,7 @@ export const contracts = [
         subjectName: "深反射地震勘探",
         subjectUnitPrice: 5485600,
         contractValue: 5485600,
-        announceDate: "2020-11-24",
-        description: "我是一个段落"
+        announceDate: "2020-11-24"
     },
     {
         id: 4,
@@ -61,8 +58,7 @@ export const contracts = [
         subjectName: "高性能计算机房空调和配电系统升级",
         subjectUnitPrice: 1660395,
         contractValue: 1660395,
-        announceDate: "2020-11-24",
-        description: "我是一个段落"
+        announceDate: "2020-11-24"
     },
     {
         id: 5,
@@ -77,8 +73,7 @@ export const contracts = [
         subjectName: "“大洋号”科考船优化升级改造",
         subjectUnitPrice: 840000,
         contractValue: 840000,
-        announceDate: "2020-11-24",
-        description: "我是一个段落"
+        announceDate: "2020-11-24"
     },
     {
         id: 6,
@@ -93,8 +88,7 @@ export const contracts = [
         subjectName: "船舶燃油",
         subjectUnitPrice: 2640000.00,
         contractValue: 2640000.00,
-        announceDate: "2020-11-24",
-        description: "我是一个段落"
+        announceDate: "2020-11-24"
     },
     {
         id: 7,
@@ -109,8 +103,7 @@ export const contracts = [
         subjectName: "贵州法院诉讼服务综合管理平台",
         subjectUnitPrice: 1500,
         contractValue: 201000,
-        announceDate: "2020-11-24",
-        description: "我是一个段落"
+        announceDate: "2020-11-24"
     },
     {
         id: 8,
@@ -125,8 +118,7 @@ export const contracts = [
         subjectName: "棒球服装及器材项目",
         subjectUnitPrice: "详见磋商响应文件",
         contractValue: 38600,
-        announceDate: "2020-11-20",
-        description: "我是一个段落"
+        announceDate: "2020-11-20"
     },
     {
         id: 9,
@@ -141,8 +133,7 @@ export const contracts = [
         subjectName: "贵州法院诉讼服务综合管理平台",
         subjectUnitPrice: 2460000.00,
         contractValue: 2460000.00,
-        announceDate: "2020-12-10",
-        description: "我是一个段落"
+        announceDate: "2020-12-10"
     },
     {
         id: 10,
@@ -157,8 +148,7 @@ export const contracts = [
         subjectName: "苗木类",
         subjectUnitPrice: 1480500,
         contractValue: 1480500,
-        announceDate: "2020-11-20",
-        description: "我是一个段落"
+        announceDate: "2020-11-20"
     },
     {
         id: 11,
@@ -173,8 +163,7 @@ export const contracts = [
         subjectName: "64排CT全保服务项目",
         subjectUnitPrice: 1900000,
         contractValue: 1900000,
-        announceDate: "2020-11-20",
-        description: "我是一个段落"
+        announceDate: "2020-11-20"
     },
     {
         id: 12,
@@ -189,8 +178,7 @@ export const contracts = [
         subjectName: "H惠普",
         subjectUnitPrice: 4490.00,
         contractValue: 17960,
-        announceDate: "2020-11-18",
-        description: "我是一个段落"
+        announceDate: "2020-11-18"
     },
     {
         id: 13,
@@ -205,7 +193,6 @@ export const contracts = [
         subjectName: "高架床",
         subjectUnitPrice: 950,
         contractValue: 11400,
-        announceDate: "2020-11-18",
-        description: "我是一个段落"
+        announceDate: "2020-11-18"
     },
 ]

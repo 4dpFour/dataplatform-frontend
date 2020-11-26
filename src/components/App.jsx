@@ -7,7 +7,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 // 自定义组件
 import DPMenu from './common/DPMenu/DPMenu';
-import DPHeader from './common/DPHeader/DPHeader';
 
 // 组件库 & css
 import './App.css';
@@ -24,8 +23,6 @@ export default class App extends React.Component {
                     <DPMenu />
                     {/* 右侧内容 */}
                     <Layout className="site-layout">
-                        {/* Header */}
-                        <DPHeader />
                         {/* 内容 */}
                         {routes}
                     </Layout>

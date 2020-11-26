@@ -21,6 +21,7 @@ class InfoEditor extends React.Component {
     constructor(props) {
         super(props);
 
+        // 初始状态
         this.state = {
             // 表单值
             contractNo: '无',
@@ -41,26 +42,76 @@ class InfoEditor extends React.Component {
     // 确认
     onClickOKButton = () => {
         this.props.handleVisibility(false);
+        const { selectedRowKey } = this.props;
 
-        const data = {
-            id: Math.round(Math.random() * 1000),
-            contractNo: this.state.contractNo,
-            contractName: this.state.contractName,
-            projectNo: this.state.projectNo,
-            projectName: this.state.projectName,
-            purchaser: this.state.purchaser,
-            purchaserTelNo: this.state.purchaserTelNo,
-            supplier: this.state.supplier,
-            supplierTelNo: this.state.supplierTelNo,
-            subjectName: this.state.subjectName,
-            subjectUnitPrice: this.state.subjectUnitPrice,
-            contractValue: this.state.contractValue,
-            announceDate: this.state.announceDate,
-            description: "我是一个段落"
+        // 添加行
+        if (selectedRowKey == -1) {
+            this.addRow();
         }
-        this.props.dataTableActions.addRow(data);
+        // 更新行
+        else {
+            this.updateRow(selectedRowKey);
+        }
 
-        // 清空表单所有字段值
+        this.clearFieldsValue();
+    }
+
+    // 取消
+    onClickCancelButton = () => {
+        this.props.handleVisibility(false);
+    }
+
+    // 添加行
+    addRow = () => {
+        const { contractNo, contractName,
+            projectNo, projectName,
+            purchaser, purchaserTelNo,
+            supplier, supplierTelNo,
+            subjectName, subjectUnitPrice, contractValue, announceDate } = this.state;
+        const newData = {
+            id: Math.round(Math.random() * 10000),
+            contractNo: contractNo,
+            contractName: contractName,
+            projectNo: projectNo,
+            projectName: projectName,
+            purchaser: purchaser,
+            purchaserTelNo: purchaserTelNo,
+            supplier: supplier,
+            supplierTelNo: supplierTelNo,
+            subjectName: subjectName,
+            subjectUnitPrice: subjectUnitPrice,
+            contractValue: contractValue,
+            announceDate: announceDate
+        }
+        this.props.dataTableActions.addRow(newData);
+    }
+
+    // 更新行
+    updateRow = (selectedRowKey) => {
+        const ref = this.formRef.current;
+        let selectedRowData = this.props.selectedRowData;
+        selectedRowData = {
+            id: selectedRowData.id,
+            contractNo: ref.getFieldValue('contractNo') ? ref.getFieldValue('contractNo') : selectedRowData.contractNo,
+            contractName: ref.getFieldValue('contractName') ? ref.getFieldValue('contractName') : selectedRowData.contractName,
+            projectNo: ref.getFieldValue('projectNo') ? ref.getFieldValue('projectNo') : selectedRowData.projectNo,
+            projectName: ref.getFieldValue('projectName') ? ref.getFieldValue('projectName') : selectedRowData.projectName,
+            purchaser: ref.getFieldValue('purchaser') ? ref.getFieldValue('purchaser') : selectedRowData.purchaser,
+            purchaserTelNo: ref.getFieldValue('purchaserTelNo') ? ref.getFieldValue('purchaserTelNo') : selectedRowData.purchaserTelNo,
+            supplier: ref.getFieldValue('supplier') ? ref.getFieldValue('supplier') : selectedRowData.supplier,
+            supplierTelNo: ref.getFieldValue('supplierTelNo') ? ref.getFieldValue('supplierTelNo') : selectedRowData.supplierTelNo,
+            subjectName: ref.getFieldValue('subjectName') ? ref.getFieldValue('subjectName') : selectedRowData.subjectName,
+            subjectUnitPrice: ref.getFieldValue('subjectUnitPrice') ? ref.getFieldValue('subjectUnitPrice') : selectedRowData.subjectUnitPrice,
+            contractValue: ref.getFieldValue('contractValue') ? ref.getFieldValue('contractValue') : selectedRowData.contractValue,
+            announceDate: ref.getFieldValue('announceDate') ? ref.getFieldValue('announceDate') : selectedRowData.announceDate
+        }
+        this.props.dataTableActions.updateRow(selectedRowKey, selectedRowData);
+        this.props.updateSelectedRowData(selectedRowData);
+        this.clearFieldsValue();
+    }
+
+    // 清空表单
+    clearFieldsValue() {
         this.formRef.current.setFieldsValue({
             contractNo: '',
             contractName: '',
@@ -77,32 +128,35 @@ class InfoEditor extends React.Component {
         })
     }
 
-    // 取消
-    onClickCancelButton = () => {
-        this.props.handleVisibility(false);
-    }
-
     // 当表单字段值更新触发的回调
     onValuesChange = (changedValues, allValues) => {
+        const { contractNo, contractName,
+            projectNo, projectName,
+            purchaser, purchaserTelNo,
+            supplier, supplierTelNo,
+            subjectName, subjectUnitPrice, contractValue } = this.state;
         // 更新字段值
         this.setState({
-            contractNo: allValues.contractNo ? allValues.contractNo : '无',
-            contractName: allValues.contractName ? allValues.contractName : '无',
-            projectNo: allValues.projectNo ? allValues.projectNo : '无',
-            projectName: allValues.projectName ? allValues.projectName : '无',
-            purchaser: allValues.purchaser ? allValues.purchaser : '无',
-            purchaserTelNo: allValues.purchaserTelNo ? allValues.purchaserTelNo : '无',
-            supplier: allValues.supplier ? allValues.supplier : '无',
-            supplierTelNo: allValues.supplierTelNo ? allValues.supplierTelNo : '无',
-            subjectName: allValues.subjectName ? allValues.subjectName : '无',
-            subjectUnitPrice: allValues.subjectUnitPrice ? allValues.subjectUnitPrice : 0,
-            contractValue: allValues.contractValue ? allValues.contractValue : 0
+            contractNo: allValues.contractNo ? allValues.contractNo : contractNo,
+            contractName: allValues.contractName ? allValues.contractName : contractName,
+            projectNo: allValues.projectNo ? allValues.projectNo : projectNo,
+            projectName: allValues.projectName ? allValues.projectName : projectName,
+            purchaser: allValues.purchaser ? allValues.purchaser : purchaser,
+            purchaserTelNo: allValues.purchaserTelNo ? allValues.purchaserTelNo : purchaserTelNo,
+            supplier: allValues.supplier ? allValues.supplier : supplier,
+            supplierTelNo: allValues.supplierTelNo ? allValues.supplierTelNo : supplierTelNo,
+            subjectName: allValues.subjectName ? allValues.subjectName : subjectName,
+            subjectUnitPrice: allValues.subjectUnitPrice ? allValues.subjectUnitPrice : subjectUnitPrice,
+            contractValue: allValues.contractValue ? allValues.contractValue : contractValue
         })
     }
 
     // 当时间发生变化的回调
     onDatePickerValueChange = (date, dateString) => {
-        this.setState({ announceDate: dateString })
+        this.setState({ announceDate: dateString });
+        this.formRef.current.setFieldsValue({
+            announceDate: dateString
+        });
     }
 
     getFormattedDate() {
@@ -113,8 +167,11 @@ class InfoEditor extends React.Component {
     }
 
     render() {
+        const { selectedRowData } = this.props;
+
         return (
             <Modal
+                destroyOnClose={true}
                 title="编辑"
                 okText='确认'
                 cancelText='取消'
@@ -128,41 +185,41 @@ class InfoEditor extends React.Component {
                             layout="vertical"
                             onValuesChange={this.onValuesChange}>
                             <Form.Item label="合同编号" name='contractNo'>
-                                <Input />
+                                <Input defaultValue={selectedRowData.contractNo} />
                             </Form.Item>
-                            <Form.Item label="合同名称" name='contractName'>
-                                <Input />
+                            <Form.Item label="合同名称" name='contractName' >
+                                <Input defaultValue={selectedRowData.contractName} />
                             </Form.Item>
                             <Form.Item label="项目编号" name='projectNo'>
-                                <Input />
+                                <Input defaultValue={selectedRowData.projectNo} />
                             </Form.Item>
                             <Form.Item label="项目名称" name='projectName'>
-                                <Input />
+                                <Input defaultValue={selectedRowData.projectName} />
                             </Form.Item>
                             <Form.Item label="采购人(甲方)" name='purchaser'>
-                                <Input />
+                                <Input defaultValue={selectedRowData.purchaser} />
                             </Form.Item>
                             <Form.Item label="采购人联系电话" name='purchaserTelNo'>
-                                <Input />
+                                <Input defaultValue={selectedRowData.purchaserTelNo} />
                             </Form.Item>
                             <Form.Item label="供应商(乙方)" name='supplier'>
-                                <Input />
+                                <Input defaultValue={selectedRowData.supplier} />
                             </Form.Item>
                             <Form.Item label="供应商联系电话" name='supplierTelNo'>
-                                <Input />
+                                <Input defaultValue={selectedRowData.supplierTelNo} />
                             </Form.Item>
                             <Form.Item label="主要标的名称" name='subjectName'>
-                                <Input />
+                                <Input defaultValue={selectedRowData.subjectName} />
                             </Form.Item>
                             <Form.Item label="主要标的单价" name='subjectUnitPrice'>
-                                <InputNumber defaultValue={0} />
+                                <InputNumber defaultValue={selectedRowData.subjectUnitPrice ? selectedRowData.subjectUnitPrice : 0} />
                             </Form.Item>
                             <Form.Item label="合同金额" name='contractValue'>
-                                <InputNumber defaultValue={0} />
+                                <InputNumber defaultValue={selectedRowData.contractValue ? selectedRowData.contractValue : 0} />
                             </Form.Item>
                             <Form.Item label="合同公告日期" name='annouceDate'>
                                 <DatePicker
-                                    defaultValue={moment(this.getFormattedDate(), 'YYYY-MM-DD')}
+                                    defaultValue={moment(selectedRowData.announceDate ? selectedRowData.announceDate : this.getFormattedDate(), 'YYYY-MM-DD')}
                                     onChange={this.onDatePickerValueChange} />
                             </Form.Item>
                         </Form>
