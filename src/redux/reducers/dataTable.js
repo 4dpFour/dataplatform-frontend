@@ -7,22 +7,19 @@ const DataTableAction = ActionType.dataTable;
 // 初始状态
 const initialState = {
     // TODO: 暂时使用假数据
-    dataSource: MockData.contracts,
+    dataSource: [],
     bordered: false,
     layout: 'fixed'
 }
 
 const dataTableReducer = (state = initialState, action) => {
     switch (action.type) {
-        // 0. 获取假数据
-        case DataTableAction.FETCH_MOCK_DATA:
-            return {
-                dataSource: action.data
-            }
-
         // 1. 获取数据
         case DataTableAction.FETCH_DATA:
-            return state
+            return {
+                ...state,
+                dataSource: action.data
+            }
 
         // 2. 添加行
         case DataTableAction.ADD_ROW:

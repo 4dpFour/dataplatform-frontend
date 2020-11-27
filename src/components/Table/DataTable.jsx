@@ -7,16 +7,19 @@ import { connect } from 'react-redux';
 
 // Redux Action
 import * as dataTableActions from '../../redux/actions/dataTable';
+import * as mockServerActions from '../../utils/network';
 
 // Ant Design组件库 & css
 import 'antd/dist/antd.css';
-import { Table, Switch, Radio, Form, Button, Modal } from 'antd';
+import { Table, Switch, Radio, Form, Button, Modal, message } from 'antd';
 
 // 组件
 import InfoEditor from './InfoEditor';
 
 // Util
 import { findIndex } from 'lodash';
+import urls from '../../constants/urls';
+import { exportData } from '../../utils/exportData';
 
 const columns = [
     { title: '合同编号', dataIndex: 'contractNo' },
@@ -83,6 +86,20 @@ class DataTable extends React.Component {
             }
         }
 
+    }
+
+    componentDidMount() {
+        const len = this.props.dataSource.length;
+        if (len == 0) {
+            this.props.mockServerActions.fetchData(urls.contract_list)
+                .then(resp => resp.data)
+                // data这个字段名字没取好...
+                .then(data => data.data)
+                .then(data => {
+                    // 把请求到的数据填入到store中
+                    this.props.dataTableActions.fetchData(data);
+                })
+        }
     }
 
     toggleBorder = () => {
@@ -253,7 +270,7 @@ class DataTable extends React.Component {
                 <InfoEditor
                     visible={this.state.infoEditorVisible}
                     handleVisibility={this.handleInfoEditorVisible}
-                    selectedRowKey={this.state.selectedRowKeys.length != 1 ? -1 : this.state.selectedRowKeys[0]}
+                    selectedRowKey={this.state.selectedRowKeys.length !== 1 ? -1 : this.state.selectedRowKeys[0]}
                     selectedRowData={this.state.selectedRowData}
                     updateSelectedRowData={this.updateSelectedRowData} />
             </div >
@@ -271,7 +288,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dataTableActions: bindActionCreators(dataTableActions, dispatch)
+        dataTableActions: bindActionCreators(dataTableActions, dispatch),
+        mockServerActions: bindActionCreators(mockServerActions, dispatch)
     }
 }
 

@@ -2,19 +2,11 @@ import ActionType from '../../constants/actionType';
 
 const DataTableAction = ActionType.dataTable;
 
-// Action: 从本地获取假数据
-export const fetchMockData = (dataSource) => {
-    return {
-        type: DataTableAction.FETCH_MOCK_DATA,
-        data: dataSource.contracts
-    }
-}
-
 // Action: 调用API获取数据
-export const fetchData = (url) => {
+export const fetchData = (data) => {
     return {
         type: DataTableAction.FETCH_DATA,
-        url
+        data
     }
 }
 
