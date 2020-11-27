@@ -124,6 +124,12 @@ class DataTable extends React.Component {
         this.setState({ deleteRowsConfirmationVisible: true });
     }
 
+    // 导出文件
+    onClickExportButton = () => {
+        exportData(this.props.dataSource);
+        message.success('导出成功！');
+    }
+
     // 删除行
     deleteRows = (selectedRowKeys) => {
         this.props.dataTableActions.deleteRows(selectedRowKeys);
@@ -215,7 +221,8 @@ class DataTable extends React.Component {
                             保存
                         </Button>
                         <Button
-                            type='default'>
+                            type='default'
+                            onClick={this.onClickExportButton}>
                             导出
                         </Button>
                     </Form.Item>
