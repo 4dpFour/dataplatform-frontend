@@ -47,7 +47,26 @@ class DPMenu extends React.Component {
             title: "个人中心",
             icon: <UserOutlined />,
             link: '/mine'
+        }
+    ]
+
+    links = [
+        {
+            title: "数据看板",
+            link: '/dashboard'
         },
+        {
+            title: "数据列表",
+            link: '/table'
+        },
+        {
+            title: "网址配置",
+            link: '/urlconfig'
+        },
+        {
+            title: "个人中心",
+            link: '/mine'
+        }
     ]
 
     // 构造器
@@ -56,15 +75,17 @@ class DPMenu extends React.Component {
 
         this.state = {
             collapsed: false,
-            itemTitle: '数据看板'
+            itemTitle: '数据看板',
+            pathname: ''
         }
 
         // ---------- 监听路由 ----------
         this.props.history.listen(route => {
-            let targetIndex = findIndex(this.menuItems, { link: route.pathname });
+            let targetIndex = findIndex(this.links, { link: route.pathname });
+            this.setState({ pathname: route.pathname })
 
             if (targetIndex != -1) {
-                this.setState({ itemTitle: this.menuItems[targetIndex].title });
+                this.setState({ itemTitle: this.links[targetIndex].title });
             } else {
                 this.setState({ itemTitle: '数据看板' });
             }

@@ -14,6 +14,12 @@ const ActionType = {
         // 表格样式相关
         TOGGLE_BORDER: 'TOGGLE_BORDER',
         TOGGLE_LAYOUT: 'TOGGLE_LAYOUT'
+    },
+    // 用户相关
+    auth: {
+        LOG_IN: 'LOG_IN',
+        LOG_OUT: 'LOG_OUT',
+        REGISTER: 'REGISTER'
     }
 }
 
