@@ -37,7 +37,12 @@ const authReducer = (state = initialState(), action) => {
 
         // 3. 用户注册
         case AuthAction.REGISTER:
-            return state
+            return {
+                loggedIn: true,
+                username: action.userdata.username,
+                password: action.userdata.password,
+                cookie: action.userdata.cookie
+            }
 
         default:
             return state

@@ -5,12 +5,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 // 路由
-import routes from "../routes";
+import * as routes from "../routes";
 import { BrowserRouter as Router } from "react-router-dom";
 
 // 自定义组件
 import DPMenu from './common/DPMenu/DPMenu';
-import LoginPage from './Admin/LoginPage';
+import AdminPage from './Admin/AdminPage';
 
 // 组件库 & css
 import './App.css';
@@ -26,19 +26,19 @@ class App extends React.Component {
     render() {
         return (
             this.props.loggedIn ?
-                <Router routes={routes}>
+                <Router routes={routes.userRoutes}>
                     <Layout style={{ minHeight: '100vh' }}>
                         {/* 左侧菜单栏 */}
                         <DPMenu />
                         {/* 右侧内容 */}
                         <Layout className="site-layout">
                             {/* 内容 */}
-                            {routes}
+                            {routes.userRoutes}
                         </Layout>
                     </Layout>
                 </Router>
                 :
-                <LoginPage />
+                <AdminPage />
         )
     }
 

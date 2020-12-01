@@ -10,6 +10,14 @@ export const login = (userdata) => {
     }
 }
 
+// Action: 用户注册
+export const register = (userdata) => {
+    return {
+        type: AuthAction.REGISTER,
+        userdata
+    }
+}
+
 // Action: 用户退出
 export const logout = () => {
     return {

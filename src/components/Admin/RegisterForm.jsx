@@ -1,6 +1,6 @@
 // React
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
@@ -18,7 +18,7 @@ import './LoginForm.css';
 // Constants
 import urls from '../../constants/urls';
 
-class LoginForm extends React.Component {
+class RegisterForm extends React.Component {
 
     formRef = React.createRef();
 
@@ -26,39 +26,46 @@ class LoginForm extends React.Component {
         super(props);
     }
 
-    // 点击登录按钮触发的回调
-    onClickLoginButton = () => {
+    // 点击注册按钮触发的回调
+    onClickRegisterButton = () => {
         const ref = this.formRef.current;
         const username = ref.getFieldValue('username');
         const password = ref.getFieldValue('password');
+        const passwordConfirmation = ref.getFieldValue('passwordConfirmation');
 
-        // 用户名和密码都不为空
-        if (username && password) {
-            this.login(username, password);
+        // 两次密码输入不相同
+        if (password !== passwordConfirmation) {
+            message.error("两次密码输入不相同！", 1.0);
+        }
+
+        if (username && password && passwordConfirmation && (password === passwordConfirmation)) {
+            this.register(username, password);
         }
     }
 
-    // 用户登录
-    login = (username, password) => {
+    // 用户注册
+    register = (username, password) => {
         const userdata = { username, password };
         const loading = message.loading('加载中...', 0);
 
-        this.props.serverActions.loginRequest(urls.user_login, userdata)
+        this.props.serverActions.registerRequest(urls.user_register, userdata)
             .then(resp => resp.data)
             .then(data => {
                 setTimeout(loading, 1);
-                // 登录成功
+                // 注册成功
                 if (data.code == 200) {
-                    message.success("登录成功！", 1.0);
+                    message.success("注册成功！", 1.0);
 
                     const cookie = document.cookie.split('=')[1];
-                    this.props.authActions.login({ username, password, cookie });
+                    this.props.authActions.register({ username, password, cookie });
                     // 保存相关信息到本地
                     localStorage.setItem("loginTicket", cookie);
                     localStorage.setItem("username", username);
                     localStorage.setItem("password", password);
+                    // 注册成功后自动登录
+                    message.success("登录成功！", 1.0);
                 }
-                // 登录失败
+                // 注册失败
                 else {
                     message.error(data.msg, 1.0);
                 }
@@ -73,7 +80,7 @@ class LoginForm extends React.Component {
     render() {
         return (
             <Card
-                title="数据平台"
+                title="注册账号"
                 style={{ textAlign: 'center' }}
                 bordered>
                 <Form
@@ -94,16 +101,23 @@ class LoginForm extends React.Component {
                             type="password"
                             placeholder="Password" />
                     </Form.Item>
-
+                    <Form.Item
+                        name="passwordConfirmation"
+                        rules={[{ required: true, message: '请输入确认密码！' }]}>
+                        <Input
+                            prefix={<LockOutlined className="site-form-item-icon" />}
+                            type="password"
+                            placeholder="Password Confirmation" />
+                    </Form.Item>
                     <Form.Item>
                         <Button
                             type="primary"
                             htmlType="submit"
                             className="login-form-button"
-                            onClick={this.onClickLoginButton}>
-                            登录
+                            onClick={this.onClickRegisterButton}>
+                            注册
                         </Button>
-                        Or <Link to='/register'>register now!</Link>
+                        <Link to='/'>返回首页</Link>
                     </Form.Item>
                 </Form>
             </Card>
@@ -119,4 +133,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(LoginForm);
+export default withRouter(connect(null, mapDispatchToProps)(RegisterForm));

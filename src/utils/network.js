@@ -7,6 +7,13 @@ export const fetchData = (url) => {
     }
 }
 
+// 用户注册
+export const registerRequest = (url, userdata) => {
+    return dipatch => {
+        return axios.post(url, userdata);
+    }
+}
+
 // 用户登录
 export const loginRequest = (url, userdata) => {
     return dispatch => {
