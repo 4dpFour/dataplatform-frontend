@@ -46,7 +46,7 @@ class RegisterForm extends React.Component {
     // 用户注册
     register = (username, password) => {
         const userdata = { username, password };
-        const loading = message.loading('加载中...', 0);
+        const loading = message.loading('注册中...', 0);
 
         this.props.serverActions.registerRequest(urls.user_register, userdata)
             .then(resp => resp.data)

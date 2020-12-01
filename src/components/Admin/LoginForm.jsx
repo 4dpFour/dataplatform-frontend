@@ -41,7 +41,7 @@ class LoginForm extends React.Component {
     // 用户登录
     login = (username, password) => {
         const userdata = { username, password };
-        const loading = message.loading('加载中...', 0);
+        const loading = message.loading('登录中...', 0);
 
         this.props.serverActions.loginRequest(urls.user_login, userdata)
             .then(resp => resp.data)
