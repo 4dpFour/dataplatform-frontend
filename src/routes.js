@@ -28,7 +28,7 @@ export const guestRoutes = (
     <div className='container'>
         {/* 路径 */}
         <Switch>
-            <Route exact path='/' component={LoginForm}></Route>
+            <Route path='/' component={LoginForm}></Route>
             <Route exact path='/register' component={RegisterForm}></Route>
         </Switch>
     </div>
