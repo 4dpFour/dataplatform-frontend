@@ -74,7 +74,7 @@ class LoginForm extends React.Component {
         return (
             <Card
                 title="数据平台"
-                style={{ textAlign: 'center' }}
+                className='basic-card'
                 bordered>
                 <Form
                     ref={this.formRef}

@@ -13,7 +13,7 @@ import * as serverActions from '../../utils/network';
 // Ant Design组件库 & css
 import { Form, Input, Button, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import './LoginForm.css';
+import './RegisterForm.css';
 
 // Constants
 import urls from '../../constants/urls';
@@ -81,12 +81,12 @@ class RegisterForm extends React.Component {
         return (
             <Card
                 title="注册账号"
-                style={{ textAlign: 'center' }}
+                className='basic-card'
                 bordered>
                 <Form
                     ref={this.formRef}
                     name="normal-login"
-                    className="login-form"
+                    className="register-form"
                     initialValues={{ remember: true }}>
                     <Form.Item
                         name="username"
@@ -113,7 +113,7 @@ class RegisterForm extends React.Component {
                         <Button
                             type="primary"
                             htmlType="submit"
-                            className="login-form-button"
+                            className="register-form-button"
                             onClick={this.onClickRegisterButton}>
                             注册
                         </Button>

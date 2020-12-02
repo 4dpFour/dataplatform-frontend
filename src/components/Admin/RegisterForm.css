@@ -1,7 +1,14 @@
-.login-form {
+.register-form {
     max-width: 300px;
 }
 
-.login-form-button {
+.register-form-button {
     width: 100%;
+}
+
+.basic-card {
+    text-align: center;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 13px 0 rgba(228, 228, 228, 0.6);
 }
