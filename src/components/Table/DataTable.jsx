@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 // Redux Action
 import * as dataTableActions from '../../redux/actions/dataTable';
-import * as mockServerActions from '../../utils/network';
+import * as serverActions from '../../utils/network';
 
 // Ant Design组件库 & css
 import 'antd/dist/antd.css';
@@ -71,11 +71,16 @@ class DataTable extends React.Component {
                 deleteButtonDisabled = selectedRowKeys.length === 0 ? true : false;
                 editRowButtonDisabled = selectedRowKeys.length === 1 ? false : true;
 
-                // 
+                // 当selectedRowKey为1时表示可以编辑
                 const selectedRowKey = selectedRowKeys.length === 1 ? selectedRowKeys[0] : -1;
                 if (selectedRowKey !== -1) {
                     const targetIndex = findIndex(this.props.dataSource, { id: selectedRowKey });
                     selectedRowData = this.props.dataSource[targetIndex];
+                }
+
+                // 当selectedRowKeys长度为0时清空selectedRowData
+                if (selectedRowKeys.length == 0) {
+                    this.setState({ selectedRowData: {} });
                 }
 
                 // 更新状态
@@ -88,19 +93,44 @@ class DataTable extends React.Component {
                 });
             }
         }
-
     }
 
     componentDidMount() {
+        this.fetchData();
+    }
+
+    // 向服务器请求数据
+    fetchData = () => {
         const len = this.props.dataSource.length;
+
+        // 没有数据则向服务端请求数据
         if (len == 0) {
-            this.props.mockServerActions.fetchData(urls.contract_list)
-                .then(resp => resp.data)
-                // data这个字段名字没取好...
-                .then(data => data.data)
+            const loading = message.loading(messageType.Loading.FETCHING_DATA, 0);
+
+            this.props.serverActions.fetchData(urls.contract_list)
+                .then(resp => {
+                    setTimeout(loading, 1);
+                    return resp.data;
+                })
                 .then(data => {
-                    // 把请求到的数据填入到store中
-                    this.props.dataTableActions.fetchData(data);
+                    if (data.code != 200) {
+                        message.warning(messageType.Warning.DATA_NOT_FOUND, 1.0);
+                        return;
+                    } else {
+                        // data这个字段名字没取好...
+                        message.success(messageType.Success.FETCH_DATA_OK, 1.0);
+                        return data.data;
+                    }
+                })
+                .then(data => {
+                    if (data != null) {
+                        // 把请求到的数据填入到store中
+                        this.props.dataTableActions.fetchData(data);
+                    }
+                })
+                .catch(err => {
+                    setTimeout(loading, 1);
+                    message.error(messageType.Error.ERROR_HAPPEN);
                 })
         }
     }
@@ -147,8 +177,35 @@ class DataTable extends React.Component {
     // 导出文件
     onClickExportButton = () => {
         exportData(this.props.dataSource);
-        message.success('导出成功！');
+        message.success(messageType.Success.EXPORT_DATA_OK, 1.0);
     }
+
+    // 点击爬取按钮时触发的回调
+    onClickCrawlButton = () => {
+        const loading = message.loading(messageType.Loading.CRAWLING_DATA, 0);
+
+        this.props.serverActions.crawlData(urls.contract_crawl)
+            .then(resp => {
+                setTimeout(loading, 1);
+                return resp.data;
+            })
+            .then(data => {
+                if (data.code == 200) {
+                    const increment = data.data.increment;
+                    message.success(messageType.Success.CRAWL_DATA_OK(increment), 1.0);
+                    // 爬取成功后获取数据
+                    this.fetchData();
+                } else {
+                    message.warning(data.msg, 1.0);
+                    return;
+                }
+            })
+            .catch(() => {
+                setTimeout(loading, 1);
+                message.error(messageType.Error.ERROR_HAPPEN, 1.0);
+            });
+    }
+
 
     // 删除行
     deleteRows = (selectedRowKeys) => {
@@ -159,6 +216,7 @@ class DataTable extends React.Component {
         this.setState({
             rowNumber: currentRowNumber,
             selectedRowKeys: [],
+            selectedRowData: {},
             // 当前没有数据或未选中行
             deleteButtonDisabled: currentRowNumber === 0 || selectedRowKeys.length,
             addButtonDisabled: false
@@ -171,6 +229,16 @@ class DataTable extends React.Component {
             deleteRowsConfirmationVisible: false,
             editRowButtonDisabled: true
         });
+
+        // message
+        //     .loading('删除中...', 0.5)
+        //     .then(() => {
+        //         this.deleteRows(this.state.selectedRowKeys);
+        //     })
+        //     .then(() => {
+        //         message.success('删除成功！', 1.0);
+        //     });
+
         this.deleteRows(this.state.selectedRowKeys);
     }
 
@@ -237,8 +305,8 @@ class DataTable extends React.Component {
                         <Button
                             type='default'
                             style={{ marginRight: 5 }}
-                            disabled={true}>
-                            保存
+                            onClick={this.onClickCrawlButton}>
+                            爬取
                         </Button>
                         <Button
                             type='default'
@@ -252,7 +320,7 @@ class DataTable extends React.Component {
                 <Table
                     bordered={this.props.bordered}
                     tableLayout={this.props.layout}
-                    pagination={{ pageSize: 20 }}
+                    pagination={{ pageSize: 10 }}
                     scroll={{ x: '200vw' }}
                     rowSelection={this.rowSelection}
                     columns={tableColumns}
@@ -292,7 +360,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         dataTableActions: bindActionCreators(dataTableActions, dispatch),
-        mockServerActions: bindActionCreators(mockServerActions, dispatch)
+        serverActions: bindActionCreators(serverActions, dispatch)
     }
 }
 
