@@ -18,8 +18,11 @@ import InfoEditor from './InfoEditor';
 
 // Util
 import { findIndex } from 'lodash';
-import urls from '../../constants/urls';
 import { exportData } from '../../utils/exportData';
+
+// Constants
+import urls from '../../constants/urls';
+import messageType from '../../constants/messageType';
 
 const columns = [
     { title: '合同编号', dataIndex: 'contractNo' },

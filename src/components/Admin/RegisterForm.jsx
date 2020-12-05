@@ -17,6 +17,7 @@ import './RegisterForm.css';
 
 // Constants
 import urls from '../../constants/urls';
+import messageType from '../../constants/messageType';
 
 class RegisterForm extends React.Component {
 
@@ -35,7 +36,7 @@ class RegisterForm extends React.Component {
 
         // 两次密码输入不相同
         if (password !== passwordConfirmation) {
-            message.error("两次密码输入不相同！", 1.0);
+            message.error(messageType.Error.PASSWORD_UNEQUAL, 1.0);
         }
 
         if (username && password && passwordConfirmation && (password === passwordConfirmation)) {
@@ -46,7 +47,7 @@ class RegisterForm extends React.Component {
     // 用户注册
     register = (username, password) => {
         const userdata = { username, password };
-        const loading = message.loading('注册中...', 0);
+        const loading = message.loading(messageType.Loading.REGISTERING, 0);
 
         this.props.serverActions.registerRequest(urls.user_register, userdata)
             .then(resp => resp.data)
@@ -54,7 +55,7 @@ class RegisterForm extends React.Component {
                 setTimeout(loading, 1);
                 // 注册成功
                 if (data.code == 200) {
-                    message.success("注册成功！", 1.0);
+                    message.success(messageType.Success.REGISTER_OK, 1.0);
 
                     const cookie = document.cookie.split('=')[1];
                     this.props.authActions.register({ username, password, cookie });
@@ -63,7 +64,7 @@ class RegisterForm extends React.Component {
                     localStorage.setItem("username", username);
                     localStorage.setItem("password", password);
                     // 注册成功后自动登录
-                    message.success("登录成功！", 1.0);
+                    message.success(messageType.Success.LOGIN_OK, 1.0);
                 }
                 // 注册失败
                 else {
@@ -72,7 +73,7 @@ class RegisterForm extends React.Component {
             })
             .catch(err => {
                 setTimeout(loading, 1);
-                message.error('发生错误！');
+                message.error(messageType.Error.ERROR_HAPPEN);
                 return;
             });
     }

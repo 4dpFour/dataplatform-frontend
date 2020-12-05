@@ -17,6 +17,7 @@ import './LoginForm.css';
 
 // Constants
 import urls from '../../constants/urls';
+import messageType from '../../constants/messageType';
 
 class LoginForm extends React.Component {
 
@@ -41,7 +42,7 @@ class LoginForm extends React.Component {
     // 用户登录
     login = (username, password) => {
         const userdata = { username, password };
-        const loading = message.loading('登录中...', 0);
+        const loading = message.loading(messageType.Loading.LOGGING_IN, 0);
 
         this.props.serverActions.loginRequest(urls.user_login, userdata)
             .then(resp => resp.data)
@@ -49,7 +50,7 @@ class LoginForm extends React.Component {
                 setTimeout(loading, 1);
                 // 登录成功
                 if (data.code == 200) {
-                    message.success("登录成功！", 1.0);
+                    message.success(messageType.Success.LOGIN_OK, 1.0);
 
                     const cookie = document.cookie.split('=')[1];
                     this.props.authActions.login({ username, password, cookie });
@@ -65,7 +66,7 @@ class LoginForm extends React.Component {
             })
             .catch(err => {
                 setTimeout(loading, 1);
-                message.error('发生错误！');
+                message.error(messageType.Error.ERROR_HAPPEN, 1.0);
                 return;
             });
     }

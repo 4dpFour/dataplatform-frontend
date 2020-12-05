@@ -12,7 +12,7 @@ import * as authActions from '../../redux/actions/auth';
 
 // Ant Design组件库
 import 'antd/dist/antd.css';
-import { Layout, Menu, message, Divider } from "antd";
+import { Layout, Menu, message } from "antd";
 
 // 自定义组件
 import LoggedIn from './LoggedIn';
@@ -22,6 +22,7 @@ import './MinePage.css';
 
 // Constants
 import urls from '../../constants/urls';
+import messageType from '../../constants/messageType';
 
 const { Content } = Layout;
 
@@ -53,15 +54,15 @@ class MinePage extends React.Component {
                     localStorage.removeItem('username');
                     localStorage.removeItem('password');
 
-                    message.success("退出成功！", 1.0);
+                    message.success(messageType.Success.LOGOUT_OK, 1.0);
                 }
                 // 退出失败
                 else {
-                    message.error("退出失败！", 1.0);
+                    message.error(messageType.Error.LOGOUT_FAIL, 1.0);
                 };
             })
             .catch(err => {
-                message.error('发生错误！', 1.0);
+                message.error(messageType.Error.ERROR_HAPPEN, 1.0);
                 this.props.authActions.logout();
             })
     }

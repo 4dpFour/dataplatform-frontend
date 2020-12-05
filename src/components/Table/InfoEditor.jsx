@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import * as dataTableActions from '../../redux/actions/dataTable';
 
 // Ant Design组件库
-import { Form, Modal, Input, DatePicker, InputNumber } from 'antd';
+import { Form, Modal, Input, DatePicker, InputNumber, message } from 'antd';
 
 // Date
 import moment from 'moment';
@@ -82,7 +82,17 @@ class InfoEditor extends React.Component {
             subjectUnitPrice: subjectUnitPrice,
             contractValue: contractValue,
             announceDate: announceDate
-        }
+        };
+
+        // message
+        //     .loading('添加中...', 0.5)
+        //     .then(() => {
+        //         this.props.dataTableActions.addRow(newData);
+        //     })
+        //     .then(() => {
+        //         message.success('添加成功！', 1.0);
+        //     });
+
         this.props.dataTableActions.addRow(newData);
     }
 
@@ -105,9 +115,19 @@ class InfoEditor extends React.Component {
             contractValue: ref.getFieldValue('contractValue') ? ref.getFieldValue('contractValue') : selectedRowData.contractValue,
             announceDate: ref.getFieldValue('announceDate') ? ref.getFieldValue('announceDate') : selectedRowData.announceDate
         }
+
+        // message
+        //     .loading('修改中...', 0.5)
+        //     .then(() => {
+        //         this.props.dataTableActions.updateRow(selectedRowKey, selectedRowData);
+        //         this.props.updateSelectedRowData(selectedRowData);
+        //     })
+        //     .then(() => {
+        //         message.success('修改成功！', 1.0);
+        //     });
+
         this.props.dataTableActions.updateRow(selectedRowKey, selectedRowData);
         this.props.updateSelectedRowData(selectedRowData);
-        this.clearFieldsValue();
     }
 
     // 清空表单
