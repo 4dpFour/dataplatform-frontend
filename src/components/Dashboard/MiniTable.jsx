@@ -5,17 +5,21 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-// Redux 
+// Redux Action
 import * as dataTableActions from '../../redux/actions/dataTable';
 import * as serverActions from '../../utils/network';
 
 // Ant Design组件库
-import { Table, message } from 'antd';
+import { Row, Col, Table, message } from 'antd';
 
 // Util
 import urls from '../../constants/urls';
 
+// Constants
+import messageType from '../../constants/messageType';
+
 const columns = [
+    { title: '来源', dataIndex: 'url' },
     { title: '合同编号', dataIndex: 'contractNo' },
     { title: '合同名称', dataIndex: 'contractName' },
     { title: '项目编号', dataIndex: 'projectNo' },
@@ -37,11 +41,16 @@ class MiniTable extends React.Component {
     }
 
     componentDidMount() {
+        this.fetchData();
+    }
+
+    // 向服务器请求数据
+    fetchData = () => {
         const len = this.props.dataSource.length;
 
         // 没有数据则向服务端请求数据
         if (len == 0) {
-            const loading = message.loading('数据加载中...', 0);
+            const loading = message.loading(messageType.Loading.FETCHING_DATA, 0);
 
             this.props.serverActions.fetchData(urls.contract_list)
                 .then(resp => {
@@ -49,22 +58,23 @@ class MiniTable extends React.Component {
                     return resp.data;
                 })
                 .then(data => {
-                    if (data.msg != 'OK') {
-                        message.error('数据加载失败！', 1.0);
+                    if (data.code != 200) {
+                        message.warning(messageType.Warning.DATA_NOT_FOUND, 1.0);
                         return;
                     } else {
-                        // data这个字段名字没取好...
-                        message.success('数据加载成功！', 1.0);
+                        message.success(messageType.Success.FETCH_DATA_OK, 1.0);
                         return data.data;
                     }
                 })
                 .then(data => {
-                    // 把请求到的数据填入到store中
-                    this.props.dataTableActions.fetchData(data);
+                    if (data != null) {
+                        // 把请求到的数据填入到store中 
+                        this.props.dataTableActions.fetchData(data);
+                    }
                 })
                 .catch(() => {
                     setTimeout(loading, 1);
-                    message.error("发生错误！");
+                    message.error(messageType.Error.ERROR_HAPPEN, 1.0);
                 })
         }
     }
@@ -77,19 +87,24 @@ class MiniTable extends React.Component {
                 ...contract
             }
         });
+        // 取前5条数据
         dataSource = dataSource.slice(0, 5);
         const tableColumns = columns.map(item => ({ ...item, align: 'center' }));
 
         return (
-            <Table
-                bordered
-                tableLayout='fixed'
-                pagination={{ pageSize: 5 }}
-                scroll={{ x: '200vw' }}
-                columns={tableColumns}
-                pagination={false}
-                dataSource={dataSource}
-            />
+            <Row>
+                <Col span={24}>
+                    <Table
+                        title={() => '最近5条数据'}
+                        bordered
+                        tableLayout='fixed'
+                        pagination={{ pageSize: 5 }}
+                        scroll={{ x: '200vw' }}
+                        columns={tableColumns}
+                        pagination={false}
+                        dataSource={dataSource} />
+                </Col>
+            </Row>
         )
     }
 

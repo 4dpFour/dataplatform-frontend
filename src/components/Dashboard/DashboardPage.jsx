@@ -77,13 +77,8 @@ class DashboardPage extends React.Component {
                         </Col>
                     </Row>
                     <div style={{ height: 10 }}></div>
-
                     {/* Row 3 */}
-                    <Row>
-                        <Col span={24}>
-                            <MiniTable />
-                        </Col>
-                    </Row>
+                    <MiniTable />
                 </div>
             </Content>
         )
