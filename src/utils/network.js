@@ -1,7 +1,21 @@
 import axios from 'axios';
 
-// 从模拟服务器获取假数据
+// 从服务器获取数据
 export const fetchData = (url) => {
+    return dispatch => {
+        return axios.get(url);
+    }
+}
+
+// 保存Url
+export const saveUrls = (url, data) => {
+    return dispatch => {
+        return axios.post(url, data);
+    }
+}
+
+// 爬数据
+export const crawlData = (url) => {
     return dispatch => {
         return axios.get(url);
     }

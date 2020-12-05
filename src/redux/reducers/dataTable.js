@@ -1,12 +1,10 @@
 import ActionType from '../../constants/actionType';
-import * as MockData from "../../constants/MockData";
 import { findIndex } from 'lodash';
 
 const DataTableAction = ActionType.dataTable;
 
 // 初始状态
 const initialState = {
-    // TODO: 暂时使用假数据
     dataSource: [],
     bordered: false,
     layout: 'fixed'

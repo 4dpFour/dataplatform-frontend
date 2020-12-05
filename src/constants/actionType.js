@@ -20,6 +20,10 @@ const ActionType = {
         LOG_IN: 'LOG_IN',
         LOG_OUT: 'LOG_OUT',
         REGISTER: 'REGISTER'
+    },
+    // 配置URL
+    urlConfig: {
+        SAVE_URLS: 'SAVE_URLS'
     }
 }
 
