@@ -7,7 +7,9 @@ const messageType = {
         // 数据存取相关
         FETCH_DATA_OK: '数据获取成功！',
         EXPORT_DATA_OK: '导出数据成功！',
-        CRAWL_DATA_OK: '数据爬取成功！',
+        CRAWL_DATA_OK: (increment) => {
+            return `更新了${increment}条数据！`
+        },
         // 数据操作相关
         ADD_DATA_OK: '添加成功！',
         DELETE_DATA_OK: '删除成功！',
