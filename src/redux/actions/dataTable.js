@@ -10,6 +10,14 @@ export const fetchData = (data) => {
     }
 }
 
+// Action: 查询数据
+export const queryData = (data) => {
+    return {
+        type: DataTableAction.QUERY_DATA,
+        data
+    }
+}
+
 // Action: 添加行
 export const addRow = (data) => {
     return {

@@ -9,7 +9,7 @@ const ActionType = {
         CLEAR: 'CLEAR',
         // 数据操作相关
         FETCH_DATA: 'FETCH_DATA',
-        FETCH_MOCK_DATA: 'FETCH_MOCK_DATA',
+        QUERY_DATA: 'QUERY_DATA',
         ADD_ROW: 'ADD_ROW',
         UPDATE_ROW: 'UPDATE_ROW',
         DELETE_ROWS: 'DELETE_ROWS',

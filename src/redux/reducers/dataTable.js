@@ -6,6 +6,7 @@ const DataTableAction = ActionType.dataTable;
 // 初始状态
 const initialState = {
     dataSource: [],
+    queriedDataSource: [],
     bordered: false,
     layout: 'fixed'
 }
@@ -84,7 +85,14 @@ const dataTableReducer = (state = initialState, action) => {
                 layout: action.layout
             }
 
-        // 7. 清空
+        // 7. 查询数据
+        case DataTableAction.QUERY_DATA:
+            return {
+                ...state,
+                queriedDataSource: action.data
+            }
+
+        // 8. 清空
         case DataTableAction.CLEAR:
             return initialState
 

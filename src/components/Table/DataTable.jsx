@@ -11,7 +11,8 @@ import * as serverActions from '../../utils/network';
 
 // Ant Design组件库 & css
 import 'antd/dist/antd.css';
-import { Table, Switch, Radio, Form, Button, Modal, message } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { Table, Switch, Radio, Form, Button, Modal, message, Input } from 'antd';
 
 // 组件
 import InfoEditor from './InfoEditor';
@@ -41,6 +42,8 @@ const columns = [
 
 class DataTable extends React.Component {
 
+    formRef = React.createRef();
+
     constructor(props) {
         super(props);
 
@@ -55,7 +58,9 @@ class DataTable extends React.Component {
             // 提示框相关
             deleteRowsConfirmationVisible: false,
             infoEditorVisible: false,
-            selectedRowData: {}
+            selectedRowData: {},
+            // 输入框相关
+            isQuerying: false
         };
 
         // 选中行时触发
@@ -247,11 +252,63 @@ class DataTable extends React.Component {
         this.setState({ deleteRowsConfirmationVisible: false });
     }
 
+    // 点击重置按钮
+    onClickResetButton = () => {
+        this.setState({
+            isQuerying: false
+        });
+        this.props.dataTableActions.queryData([]);
+    }
+
+    // 查询数据
+    queryData = () => {
+        const ref = this.formRef.current;
+        const queryString = ref.getFieldValue('query');
+        this.setState({ isQuerying: true });
+        const loading = message.loading(messageType.Loading.QUERYING_DATA, 0);
+
+        this.props.serverActions.queryData(urls.query_data, queryString)
+            .then(resp => {
+                setTimeout(loading, 1);
+                return resp.data;
+            })
+            .then(data => {
+                // 查询到
+                if (data.code == 200) {
+                    message.success(messageType.Success.QUERY_DATA_OK, 1.0);
+                    return data.data;
+                }
+                // 未查询到
+                else {
+                    message.warning(messageType.Warning.QUERY_DATA_NOT_FOUND, 1.0);
+                    return;
+                }
+            })
+            .then(data => {
+                if (data != null) {
+                    this.props.dataTableActions.queryData(data);
+                }
+            })
+            .catch(() => {
+                setTimeout(loading, 1);
+                message.error(messageType.Error.ERROR_HAPPEN, 1.0);
+            });
+    }
+
     render() {
-        const { addButtonDisabled, editRowButtonDisabled, deleteButtonDisabled } = this.state;
+        const { addButtonDisabled, editRowButtonDisabled, deleteButtonDisabled, isQuerying } = this.state;
         const { bordered } = this.props;
 
-        const dataSource = this.props.dataSource.map(contract => {
+        let dataSource = [];
+        // 查询状态下
+        if (isQuerying) {
+            dataSource = this.props.queriedDataSource;
+        }
+        // 非查询状态下
+        else {
+            dataSource = this.props.dataSource;
+        }
+        dataSource = dataSource.map(contract => {
             return {
                 // key用来定位每一行
                 key: contract.id,
@@ -264,6 +321,7 @@ class DataTable extends React.Component {
             <div>
                 {/* 用于设置Table的表单 */}
                 <Form
+                    ref={this.formRef}
                     layout="inline"
                     className="components-table-demo-control-bar"
                     style={{ marginBottom: 16, marginLeft: 16, marginRight: 16 }}>
@@ -314,6 +372,22 @@ class DataTable extends React.Component {
                             导出
                         </Button>
                     </Form.Item>
+
+                    <Form.Item name='query'>
+                        <Input
+                            placeholder='查询'
+                            prefix={<SearchOutlined />}
+                            onPressEnter={this.queryData} />
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button
+                            type='primary'
+                            style={{ marginLeft: -10 }}
+                            onClick={this.onClickResetButton}>
+                            重置
+                        </Button>
+                    </Form.Item>
                 </Form>
 
                 {/* Table */}
@@ -352,6 +426,7 @@ class DataTable extends React.Component {
 const mapStateToProps = (state) => {
     return {
         dataSource: state.dataTable.dataSource,
+        queriedDataSource: state.dataTable.queriedDataSource,
         bordered: state.dataTable.bordered,
         layout: state.dataTable.layout
     }

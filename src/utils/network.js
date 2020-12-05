@@ -7,6 +7,13 @@ export const fetchData = (url) => {
     }
 }
 
+// 查询数据
+export const queryData = (url, query) => {
+    return dispatch => {
+        return axios.get(url + `?query=${query}`);
+    }
+}
+
 // 保存Url
 export const saveUrls = (url, data) => {
     return dispatch => {

@@ -5,5 +5,6 @@ export default {
     user_login: 'api/user/login',
     user_logout: 'api/user/logout',
     current_user: 'api/user/current',
-    url_submit: 'api/url'
+    url_submit: 'api/url',
+    query_data: 'api/contract/list'
 };

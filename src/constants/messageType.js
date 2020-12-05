@@ -10,6 +10,7 @@ const messageType = {
         CRAWL_DATA_OK: (increment) => {
             return `更新了${increment}条数据！`
         },
+        QUERY_DATA_OK: '查询成功！',
         // 数据操作相关
         ADD_DATA_OK: '添加成功！',
         DELETE_DATA_OK: '删除成功！',
@@ -18,6 +19,7 @@ const messageType = {
     Warning: {
         // 数据存取相关
         DATA_NOT_FOUND: '未发现数据！',
+        QUERY_DATA_NOT_FOUND: '结果为空！'
     },
     Error: {
         ERROR_HAPPEN: '发生错误！',
@@ -36,6 +38,7 @@ const messageType = {
         // 数据存取相关
         FETCHING_DATA: '获取数据中...',
         CRAWLING_DATA: '正在爬取数据中...',
+        QUERYING_DATA: '查询中...',
         // 数据操作相关
         ADDING_DATA: '添加中...',
         DELETING_DATA: '删除中...',
