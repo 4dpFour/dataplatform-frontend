@@ -84,6 +84,10 @@ const dataTableReducer = (state = initialState, action) => {
                 layout: action.layout
             }
 
+        // 7. 清空
+        case DataTableAction.CLEAR:
+            return initialState
+
         default:
             return state
     }

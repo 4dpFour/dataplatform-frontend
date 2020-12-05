@@ -15,6 +15,10 @@ const urlConfigReducer = (state = initialState, action) => {
                 urls: action.urls
             }
 
+        // 2. 清除数据
+        case UrlConfigAction.CLEAR:
+            return initialState
+
         default:
             return state
     }

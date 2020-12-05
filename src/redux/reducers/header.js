@@ -14,6 +14,9 @@ const headerReducer = (state = initialState, action) => {
                 title: action.title
             }
 
+        case HeaderAction.CLEAR:
+            return initialState
+
         default:
             return state
     }

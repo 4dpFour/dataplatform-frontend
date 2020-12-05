@@ -9,6 +9,10 @@ import { bindActionCreators } from 'redux';
 // Redux Action
 import * as serverActions from '../../utils/network';
 import * as authActions from '../../redux/actions/auth';
+import * as dashboardActions from '../../redux/actions/dashboard';
+import * as dataTableActions from '../../redux/actions/dataTable';
+import * as headerActions from '../../redux/actions/header';
+import * as urlConfigActions from '../../redux/actions/urlConfig';
 
 // Ant Design组件库
 import 'antd/dist/antd.css';
@@ -53,6 +57,10 @@ class MinePage extends React.Component {
                     localStorage.removeItem('loginTicket');
                     localStorage.removeItem('username');
                     localStorage.removeItem('password');
+                    this.props.dashboardActions.clear();
+                    this.props.headerActions.clear();
+                    this.props.dataTableActions.clear();
+                    this.props.urlConfigActions.clear();
 
                     message.success(messageType.Success.LOGOUT_OK, 1.0);
                 }
@@ -103,7 +111,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         serverActions: bindActionCreators(serverActions, dispatch),
-        authActions: bindActionCreators(authActions, dispatch)
+        authActions: bindActionCreators(authActions, dispatch),
+        headerActions: bindActionCreators(headerActions, dispatch),
+        dataTableActions: bindActionCreators(dataTableActions, dispatch),
+        urlConfigActions: bindActionCreators(urlConfigActions, dispatch),
+        dashboardActions: bindActionCreators(dashboardActions, dispatch)
     }
 }
 

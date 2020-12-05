@@ -49,3 +49,10 @@ export const toggleLayout = (layout) => {
         layout
     }
 }
+
+// Action: 清除数据
+export const clear = () => {
+    return {
+        type: DataTableAction.CLEAR
+    }
+}

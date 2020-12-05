@@ -9,3 +9,10 @@ export const saveUrls = (urls) => {
         urls
     }
 }
+
+// Action: 清除数据
+export const clear = () => {
+    return {
+        type: UrlConfigAction.CLEAR
+    }
+}
