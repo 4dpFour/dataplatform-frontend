@@ -11,8 +11,13 @@ import * as dataTableActions from '../../redux/actions/dataTable';
 // Ant Design组件库
 import { Form, Modal, Input, DatePicker, InputNumber, message } from 'antd';
 
-// Date
+// Util
 import moment from 'moment';
+import * as serverActions from '../../utils/network';
+
+// Constants
+import urls from '../../constants/urls';
+import messageType from '../../constants/messageType';
 
 class InfoEditor extends React.Component {
 
@@ -24,6 +29,7 @@ class InfoEditor extends React.Component {
         // 初始状态
         this.state = {
             // 表单值
+            url: '无',
             contractNo: '无',
             contractName: '无',
             projectNo: '无',
@@ -63,13 +69,13 @@ class InfoEditor extends React.Component {
 
     // 添加行
     addRow = () => {
-        const { contractNo, contractName,
+        const { url, contractNo, contractName,
             projectNo, projectName,
             purchaser, purchaserTelNo,
             supplier, supplierTelNo,
             subjectName, subjectUnitPrice, contractValue, announceDate } = this.state;
         const newData = {
-            id: Math.round(Math.random() * 10000),
+            url: url,
             contractNo: contractNo,
             contractName: contractName,
             projectNo: projectNo,
@@ -84,16 +90,34 @@ class InfoEditor extends React.Component {
             announceDate: announceDate
         };
 
-        // message
-        //     .loading('添加中...', 0.5)
-        //     .then(() => {
-        //         this.props.dataTableActions.addRow(newData);
-        //     })
-        //     .then(() => {
-        //         message.success('添加成功！', 1.0);
-        //     });
+        const loading = message.loading(messageType.Loading.ADDING_DATA, 0);
 
-        this.props.dataTableActions.addRow(newData);
+        this.props.serverActions.addRow(urls.add_row, newData)
+            .then(resp => {
+                setTimeout(loading, 1);
+                return resp.data;
+            })
+            .then(data => {
+                if (data.code != 200) {
+                    message.warning(messageType.Error.ADD_DATA_FAIL, 1.0);
+                    return;
+                } else {
+                    message.success(messageType.Success.ADD_DATA_OK, 1.0);
+                    return data.data;
+                }
+            })
+            .then(data => {
+                if (data != null) {
+                    // 把返回的data添加到store中
+                    this.props.dataTableActions.addRow(data);
+                }
+            })
+            .catch(() => {
+                setTimeout(loading, 1);
+                message.error(messageType.Error.ERROR_HAPPEN);
+            });
+
+
     }
 
     // 更新行
@@ -102,6 +126,7 @@ class InfoEditor extends React.Component {
         let selectedRowData = this.props.selectedRowData;
         selectedRowData = {
             id: selectedRowData.id,
+            url: selectedRowData.url,
             contractNo: ref.getFieldValue('contractNo') ? ref.getFieldValue('contractNo') : selectedRowData.contractNo,
             contractName: ref.getFieldValue('contractName') ? ref.getFieldValue('contractName') : selectedRowData.contractName,
             projectNo: ref.getFieldValue('projectNo') ? ref.getFieldValue('projectNo') : selectedRowData.projectNo,
@@ -116,23 +141,34 @@ class InfoEditor extends React.Component {
             announceDate: ref.getFieldValue('announceDate') ? ref.getFieldValue('announceDate') : selectedRowData.announceDate
         }
 
-        // message
-        //     .loading('修改中...', 0.5)
-        //     .then(() => {
-        //         this.props.dataTableActions.updateRow(selectedRowKey, selectedRowData);
-        //         this.props.updateSelectedRowData(selectedRowData);
-        //     })
-        //     .then(() => {
-        //         message.success('修改成功！', 1.0);
-        //     });
+        const loading = message.loading(messageType.Loading.UPDATING_DATA, 0);
 
-        this.props.dataTableActions.updateRow(selectedRowKey, selectedRowData);
-        this.props.updateSelectedRowData(selectedRowData);
+        this.props.serverActions.updateRow(urls.update_row + `/${selectedRowData.id}`, selectedRowData)
+            .then(resp => {
+                setTimeout(loading, 1);
+                return resp.data;
+            })
+            .then(data => {
+                if (data.code != 200) {
+                    message.error(messageType.Error.UPDATE_DATA_FAIL, 1.0);
+                    return;
+                } else {
+                    message.success(messageType.Success.UPDATE_DATA_OK, 1.0);
+                    this.props.dataTableActions.updateRow(selectedRowKey, selectedRowData);
+                    this.props.updateSelectedRowData(selectedRowData);
+                }
+            })
+            .catch(() => {
+                setTimeout(loading, 1);
+                message.error(messageType.Error.ERROR_HAPPEN);
+            });
+
     }
 
     // 清空表单
     clearFieldsValue() {
         this.formRef.current.setFieldsValue({
+            url: '',
             contractNo: '',
             contractName: '',
             projectNo: '',
@@ -150,13 +186,14 @@ class InfoEditor extends React.Component {
 
     // 当表单字段值更新触发的回调
     onValuesChange = (changedValues, allValues) => {
-        const { contractNo, contractName,
+        const { url, contractNo, contractName,
             projectNo, projectName,
             purchaser, purchaserTelNo,
             supplier, supplierTelNo,
             subjectName, subjectUnitPrice, contractValue } = this.state;
         // 更新字段值
         this.setState({
+            url: allValues.url ? allValues.url : url,
             contractNo: allValues.contractNo ? allValues.contractNo : contractNo,
             contractName: allValues.contractName ? allValues.contractName : contractName,
             projectNo: allValues.projectNo ? allValues.projectNo : projectNo,
@@ -204,6 +241,9 @@ class InfoEditor extends React.Component {
                             ref={this.formRef}
                             layout="vertical"
                             onValuesChange={this.onValuesChange}>
+                            <Form.Item label="来源网址" name='url'>
+                                <Input defaultValue={selectedRowData.url} />
+                            </Form.Item>
                             <Form.Item label="合同编号" name='contractNo'>
                                 <Input defaultValue={selectedRowData.contractNo} />
                             </Form.Item>
@@ -252,7 +292,8 @@ class InfoEditor extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dataTableActions: bindActionCreators(dataTableActions, dispatch)
+        dataTableActions: bindActionCreators(dataTableActions, dispatch),
+        serverActions: bindActionCreators(serverActions, dispatch)
     }
 }
 

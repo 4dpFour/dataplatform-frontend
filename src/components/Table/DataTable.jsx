@@ -26,6 +26,7 @@ import urls from '../../constants/urls';
 import messageType from '../../constants/messageType';
 
 const columns = [
+    { title: '来源', dataIndex: 'url' },
     { title: '合同编号', dataIndex: 'contractNo' },
     { title: '合同名称', dataIndex: 'contractName' },
     { title: '项目编号', dataIndex: 'projectNo' },
@@ -214,18 +215,42 @@ class DataTable extends React.Component {
 
     // 删除行
     deleteRows = (selectedRowKeys) => {
-        this.props.dataTableActions.deleteRows(selectedRowKeys);
+        const loading = message.loading(messageType.Loading.DELETING_DATA, 0);
 
-        // state中更新rowNumber
-        const currentRowNumber = this.props.dataSource.length - selectedRowKeys.length;
-        this.setState({
-            rowNumber: currentRowNumber,
-            selectedRowKeys: [],
-            selectedRowData: {},
-            // 当前没有数据或未选中行
-            deleteButtonDisabled: currentRowNumber === 0 || selectedRowKeys.length,
-            addButtonDisabled: false
-        })
+        const config = {
+            data: {
+                ids: selectedRowKeys
+            }
+        }
+        this.props.serverActions.deleteRows(urls.delete_rows, config)
+            .then(resp => {
+                setTimeout(loading, 1);
+                return resp.data;
+            })
+            .then(data => {
+                // 成功删除
+                if (data.code == 200) {
+                    message.success(messageType.Success.DELETE_DATA_OK, 1.0);
+                    this.props.dataTableActions.deleteRows(selectedRowKeys);
+
+                    // state中更新rowNumber
+                    const currentRowNumber = this.props.dataSource.length - selectedRowKeys.length;
+                    this.setState({
+                        rowNumber: currentRowNumber,
+                        selectedRowKeys: [],
+                        selectedRowData: {},
+                        // 当前没有数据或未选中行
+                        deleteButtonDisabled: currentRowNumber === 0 || selectedRowKeys.length,
+                        addButtonDisabled: false
+                    })
+                } else {
+                    message.error(messageType.Error.DELETE_DATA_FAIL, 1.0);
+                }
+            })
+            .catch(() => {
+                setTimeout(loading, 1);
+                message.error(messageType.Error.ERROR_HAPPEN);
+            });
     }
 
     // 确认删除行
@@ -234,16 +259,6 @@ class DataTable extends React.Component {
             deleteRowsConfirmationVisible: false,
             editRowButtonDisabled: true
         });
-
-        // message
-        //     .loading('删除中...', 0.5)
-        //     .then(() => {
-        //         this.deleteRows(this.state.selectedRowKeys);
-        //     })
-        //     .then(() => {
-        //         message.success('删除成功！', 1.0);
-        //     });
-
         this.deleteRows(this.state.selectedRowKeys);
     }
 

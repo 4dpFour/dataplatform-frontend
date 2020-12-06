@@ -6,5 +6,9 @@ export default {
     user_logout: 'api/user/logout',
     current_user: 'api/user/current',
     url_submit: 'api/url',
-    query_data: 'api/contract/list'
+    // 数据操作相关
+    query_data: 'api/contract/list',
+    add_row: 'api/contract',
+    update_row: 'api/contract',
+    delete_rows: 'api/contract'
 };

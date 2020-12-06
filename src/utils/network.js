@@ -55,3 +55,24 @@ export const getCurrentUser = (url) => {
         return axios.get(url);
     }
 }
+
+// 添加一条数据
+export const addRow = (url, data) => {
+    return dispatch => {
+        return axios.post(url, data);
+    }
+}
+
+// 更新一条数据
+export const updateRow = (url, data) => {
+    return dispatch => {
+        return axios.put(url, data);
+    }
+}
+
+// 删除多行数据
+export const deleteRows = (url, data) => {
+    return dispatch => {
+        return axios.delete(url, data);
+    }
+}
