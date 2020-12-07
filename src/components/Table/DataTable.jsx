@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 // Redux Action
 import * as dataTableActions from '../../redux/actions/dataTable';
+import * as dashboardActions from '../../redux/actions/dashboard';
 import * as serverActions from '../../utils/network';
 
 // Ant Design组件库 & css
@@ -482,6 +483,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         dataTableActions: bindActionCreators(dataTableActions, dispatch),
+        dashboardActions: bindActionCreators(dashboardActions, dispatch),
         serverActions: bindActionCreators(serverActions, dispatch)
     }
 }

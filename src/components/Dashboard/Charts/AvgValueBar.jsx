@@ -1,30 +1,23 @@
 // React
 import React from 'react';
 
+// Redux
+import { connect } from 'react-redux';
+
 // Ant Design组件库
 import { Card } from 'antd';
 import { Column } from '@ant-design/charts';
 
+// Util
+import * as analysis from '../../../utils/analysis';
+
 class AvgValueBar extends React.Component {
 
-    mockData = [
-        { date: '11/01', value: 447000 },
-        { date: '11/02', value: 541000 },
-        { date: '11/03', value: 332000 },
-        { date: '11/04', value: 25600 },
-        { date: '11/05', value: 640000 },
-        { date: '11/06', value: 447000 },
-        { date: '11/07', value: 541000 },
-        { date: '11/08', value: 332000 },
-        { date: '11/09', value: 25600 },
-        { date: '11/10', value: 640000 },
-    ];
-
     config = {
-        data: this.mockData,
+        data: [],
         height: 300,
-        xField: 'date',
-        yField: 'value',
+        xField: 'source',
+        yField: 'number',
         color: '#5BA8F5',
         label: {
             position: 'middle',
@@ -34,11 +27,18 @@ class AvgValueBar extends React.Component {
             }
         },
         meta: {
-            value: { alias: '合同平均金额' }
+            source: { alias: '网站' },
+            number: { alias: '数量' }
         }
     };
 
+    constructor(props) {
+        super(props);
+    }
+
     render() {
+        this.config.data = analysis.barData(this.props.dataSource);
+
         return (
             <Card>
                 <Column {...this.config} />
@@ -48,4 +48,10 @@ class AvgValueBar extends React.Component {
 
 }
 
-export default AvgValueBar;
+const mapStateToProps = (state) => {
+    return {
+        dataSource: state.dataTable.dataSource
+    }
+}
+
+export default connect(mapStateToProps, null)(AvgValueBar);

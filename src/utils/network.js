@@ -21,6 +21,13 @@ export const saveUrls = (url, data) => {
     }
 }
 
+// 获取Url列表
+export const getUrls = (url) => {
+    return dispatch => {
+        return axios.get(url);
+    }
+}
+
 // 爬数据
 export const crawlData = (url) => {
     return dispatch => {

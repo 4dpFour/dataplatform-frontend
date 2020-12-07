@@ -1,31 +1,23 @@
 // React
 import React from 'react';
 
+// Redux
+import { connect } from 'react-redux';
+
 // Ant Design组件库
 import { Card } from 'antd';
 import { Line } from '@ant-design/charts';
 
+// Util
+import * as analysis from '../../../utils/analysis';
+
 class ContractLine extends React.Component {
 
-    // mock data
-    mockData = [
-        { date: '11/01', value: 578 },
-        { date: '11/02', value: 683 },
-        { date: '11/03', value: 798 },
-        { date: '11/04', value: 844 },
-        { date: '11/05', value: 951 },
-        { date: '11/06', value: 578 },
-        { date: '11/07', value: 683 },
-        { date: '11/08', value: 798 },
-        { date: '11/09', value: 844 },
-        { date: '11/10', value: 951 },
-    ];
-
     config = {
-        data: this.mockData,
+        data: [],
         height: 300,
         xField: 'date',
-        yField: 'value',
+        yField: 'number',
         color: '#EA4D38',
         point: {
             size: 5,
@@ -39,11 +31,14 @@ class ContractLine extends React.Component {
         legend: { position: 'top' },
         smooth: true,
         meta: {
+            date: { alias: '日期' },
             value: { alias: '合同总数' }
         }
     };
 
     render() {
+        this.config.data = analysis.lineData(this.props.dataSource);
+
         return (
             <Card>
                 <Line {...this.config} />
@@ -53,4 +48,10 @@ class ContractLine extends React.Component {
 
 }
 
-export default ContractLine;
+const mapStateToProps = (state) => {
+    return {
+        dataSource: state.dataTable.dataSource
+    }
+}
+
+export default connect(mapStateToProps, null)(ContractLine);
