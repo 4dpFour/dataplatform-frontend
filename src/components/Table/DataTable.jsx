@@ -137,8 +137,39 @@ class DataTable extends React.Component {
                 .catch(err => {
                     setTimeout(loading, 1);
                     message.error(messageType.Error.ERROR_HAPPEN);
-                })
+                });
         }
+    }
+
+    // 重新向服务器获取数据
+    refetchData = () => {
+        const loading = message.loading(messageType.Loading.FETCHING_DATA, 0);
+
+        this.props.serverActions.fetchData(urls.contract_list)
+            .then(resp => {
+                setTimeout(loading, 1);
+                return resp.data;
+            })
+            .then(data => {
+                if (data.code != 200) {
+                    message.warning(messageType.Warning.DATA_NOT_FOUND, 1.0);
+                    return;
+                } else {
+                    // data这个字段名字没取好...
+                    message.success(messageType.Success.FETCH_DATA_OK, 1.0);
+                    return data.data;
+                }
+            })
+            .then(data => {
+                if (data != null) {
+                    // 把请求到的数据填入到store中
+                    this.props.dataTableActions.fetchData(data);
+                }
+            })
+            .catch(err => {
+                setTimeout(loading, 1);
+                message.error(messageType.Error.ERROR_HAPPEN);
+            });
     }
 
     toggleBorder = () => {
@@ -198,9 +229,10 @@ class DataTable extends React.Component {
             .then(data => {
                 if (data.code == 200) {
                     const increment = data.data.increment;
+                    this.props.dashboardActions.setIncrement(increment);
                     message.success(messageType.Success.CRAWL_DATA_OK(increment), 1.0);
-                    // 爬取成功后获取数据
-                    this.fetchData();
+                    // 重新向服务器请求数据
+                    this.refetchData();
                 } else {
                     message.warning(data.msg, 1.0);
                     return;
