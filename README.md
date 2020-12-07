@@ -5,8 +5,8 @@ dataplatform-frontend
 
 #### 环境依赖
 
-1. Node.js
-> JavaScript的一个运行环境。
+1. Node.js 
+> JavaScript的服务端运行环境。
 
 2. npm & npx
 > Node.js的包管理器，会在安装node的时候捆绑安装。
@@ -26,6 +26,18 @@ cnpm install
 ```
 npm start
 ```
+
+#### 主要技术栈
+
+1. React
+> 用于构建用户界面的UI框架
+
+2. Redux
+> 配合React进行全局状态管理的框架
+
+3. Ant Design
+> UI组件库。妈妈再也不用担心我要自己开发界面了～
+
 
 #### 开发Tip
 
