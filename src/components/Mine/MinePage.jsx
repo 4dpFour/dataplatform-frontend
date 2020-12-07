@@ -54,13 +54,7 @@ class MinePage extends React.Component {
                 if (data.code == 200) {
                     this.props.authActions.logout();
                     // 清除相关信息
-                    localStorage.removeItem('loginTicket');
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('password');
-                    this.props.dashboardActions.clear();
-                    this.props.headerActions.clear();
-                    this.props.dataTableActions.clear();
-                    this.props.urlConfigActions.clear();
+                    this.clearUserInfo();
 
                     message.success(messageType.Success.LOGOUT_OK, 1.0);
                 }
@@ -71,8 +65,21 @@ class MinePage extends React.Component {
             })
             .catch(err => {
                 message.error(messageType.Error.ERROR_HAPPEN, 1.0);
+                // 发生错误时还是要退出
                 this.props.authActions.logout();
+                // 清除相关信息
+                this.clearUserInfo();
             })
+    }
+
+    clearUserInfo = () => {
+        localStorage.removeItem('loginTicket');
+        localStorage.removeItem('username');
+        localStorage.removeItem('password');
+        this.props.dashboardActions.clear();
+        this.props.headerActions.clear();
+        this.props.dataTableActions.clear();
+        this.props.urlConfigActions.clear();
     }
 
     render() {
