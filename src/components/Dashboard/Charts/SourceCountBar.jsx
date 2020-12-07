@@ -21,7 +21,9 @@ class AvgValueBar extends React.Component {
         color: '#5BA8F5',
         label: {
             position: 'middle',
+            fontSize: 15,
             style: {
+                
                 fill: '#FFFFFF',
                 opacity: 0.6
             }
@@ -29,7 +31,7 @@ class AvgValueBar extends React.Component {
         meta: {
             source: { alias: '网站' },
             number: { alias: '数量' }
-        }
+        },
     };
 
     constructor(props) {

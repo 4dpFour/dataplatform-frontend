@@ -23,6 +23,7 @@ import InfoCard from './Charts/InfoCard';
 
 // Util
 import urls from '../../constants/urls';
+import * as analysis from '../../utils/analysis';
 
 class InfoCardContainer extends React.Component {
 
@@ -72,16 +73,16 @@ class InfoCardContainer extends React.Component {
         return (
             <>
                 <Row gutter={10}>
-                    <Col flex={1}>
+                    <Col span={6}>
                         <InfoCard config={cards[0]} />
                     </Col>
-                    <Col flex={1}>
+                    <Col span={6}>
                         <InfoCard config={cards[1]} />
                     </Col>
-                    <Col flex={1}>
+                    <Col span={6}>
                         <InfoCard config={cards[2]} />
                     </Col>
-                    <Col flex={1}>
+                    <Col span={6}>
                         <InfoCard config={cards[3]} />
                     </Col>
                 </Row>

@@ -40,5 +40,18 @@ export const lineData = (dataSource) => {
         data[targetIndex].number += 1;
     });
 
-    return data;
+    return data.slice(0, 10).reverse();
+}
+
+export const formattedNumber = (num) => {
+    let fn = 0;
+    if (num > 1000) {
+        fn = (num / 1000).toString();
+        fn = fn.split('.')[0];
+        fn = fn + 'K';
+
+        return fn;
+    } else {
+        return num;
+    }
 }

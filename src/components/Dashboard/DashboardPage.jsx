@@ -8,7 +8,7 @@ import { Layout, Row, Col } from "antd";
 
 // 自定义组件
 import ContractLine from './Charts/ContractLine';
-import AvgValueBar from './Charts/AvgValueBar';
+import SourceCountBar from './Charts/SourceCountBar';
 import InfoCardContainer from './InfoCardContainer';
 import MiniTable from './MiniTable';
 
@@ -28,7 +28,7 @@ class DashboardPage extends React.Component {
                             <ContractLine />
                         </Col>
                         <Col span={12}>
-                            <AvgValueBar />
+                            <SourceCountBar />
                         </Col>
                     </Row>
                     <div style={{ height: 10 }}></div>

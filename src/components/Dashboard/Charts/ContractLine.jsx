@@ -25,6 +25,7 @@ class ContractLine extends React.Component {
         },
         label: {
             style: {
+                fontSize: 15,
                 fill: '#aaa',
             },
         },
