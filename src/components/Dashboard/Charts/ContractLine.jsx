@@ -10,6 +10,7 @@ import { Line } from '@ant-design/charts';
 
 // Util
 import * as analysis from '../../../utils/analysis';
+import { maxBy } from 'lodash';
 
 class ContractLine extends React.Component {
 
@@ -29,16 +30,24 @@ class ContractLine extends React.Component {
                 fill: '#aaa',
             },
         },
+        yAxis: {
+            max: 400
+        },
         legend: { position: 'top' },
         smooth: true,
         meta: {
             date: { alias: '日期' },
             value: { alias: '合同总数' }
-        }
+        },
     };
 
     render() {
-        this.config.data = analysis.lineData(this.props.dataSource);
+        const data = analysis.lineData(this.props.dataSource);
+        this.config.data = data;
+        if (data.length != 0) {
+            const yMax = maxBy(data, item => item.number).number + 50;
+            this.config.yAxis.max = yMax;
+        }
 
         return (
             <Card>

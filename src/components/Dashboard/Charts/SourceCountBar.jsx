@@ -10,6 +10,7 @@ import { Column } from '@ant-design/charts';
 
 // Util
 import * as analysis from '../../../utils/analysis';
+import { maxBy } from 'lodash';
 
 class AvgValueBar extends React.Component {
 
@@ -23,10 +24,13 @@ class AvgValueBar extends React.Component {
             position: 'middle',
             fontSize: 15,
             style: {
-                
+
                 fill: '#FFFFFF',
                 opacity: 0.6
             }
+        },
+        yAxis: {
+            max: 400
         },
         meta: {
             source: { alias: '网站' },
@@ -39,7 +43,12 @@ class AvgValueBar extends React.Component {
     }
 
     render() {
-        this.config.data = analysis.barData(this.props.dataSource);
+        const data = analysis.barData(this.props.dataSource);
+        this.config.data = data;
+        if (data.length != 0) {
+            const yMax = maxBy(data, item => item.number).number + 50;
+            this.config.yAxis.max = yMax;
+        }
 
         return (
             <Card>
