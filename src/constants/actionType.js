@@ -26,7 +26,8 @@ const ActionType = {
     // 网址配置相关
     urlConfig: {
         CLEAR: 'CLEAR',
-        SAVE_URLS: 'SAVE_URLS'
+        SAVE_URLS: 'SAVE_URLS',
+        SAVE_SELECTED_URLS: 'SAVE_SELECTED_URLS'
     },
     // 数据看板相关
     dashboard: {

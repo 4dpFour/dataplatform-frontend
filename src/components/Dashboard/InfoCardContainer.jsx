@@ -23,7 +23,6 @@ import InfoCard from './Charts/InfoCard';
 
 // Util
 import urls from '../../constants/urls';
-import * as analysis from '../../utils/analysis';
 
 class InfoCardContainer extends React.Component {
 
@@ -42,6 +41,7 @@ class InfoCardContainer extends React.Component {
             .then(data => {
                 if (data != null) {
                     this.props.urlConfigActions.saveUrls(data);
+                    this.props.urlConfigActions.saveSelectedUrls(data);
                 }
             })
     }

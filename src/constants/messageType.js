@@ -14,13 +14,16 @@ const messageType = {
         // 数据操作相关
         ADD_DATA_OK: '添加成功！',
         DELETE_DATA_OK: '删除成功！',
-        UPDATE_DATA_OK: '更新成功！'
+        UPDATE_DATA_OK: '更新成功！',
+        SAVE_URLS_OK: '保存成功！',
+        IMPORT_CONFIG_OK: '上传成功！'
     },
     Warning: {
         // 数据存取相关
         DATA_NOT_FOUND: '未发现数据！',
         QUERY_DATA_NOT_FOUND: '结果为空！',
-        NEED_URL_CONFIG: '尚未进行网址配置，无法添加！'
+        NEED_URL_CONFIG: '尚未进行网址配置，无法添加！',
+        EMPTY_URL_CONFIG: '选择不能为空！'
     },
     Error: {
         ERROR_HAPPEN: '发生错误！',
@@ -30,7 +33,9 @@ const messageType = {
         // 数据操作相关
         ADD_DATA_FAIL: '添加失败！',
         DELETE_DATA_FAIL: '删除失败！',
-        UPDATE_DATA_FAIL: '更新失败！'
+        UPDATE_DATA_FAIL: '更新失败！',
+        SAVE_URLS_FAIL: '保存失败！',
+        IMPORT_CONFIG_FAIL: '文件内容不符合格式要求，请重新上传！'
     },
     Loading: {
         // 用户相关
@@ -43,7 +48,8 @@ const messageType = {
         // 数据操作相关
         ADDING_DATA: '添加中...',
         DELETING_DATA: '删除中...',
-        UPDATING_DATA: '更新中...'
+        UPDATING_DATA: '更新中...',
+        SAVING_URLS: '保存中...'
     }
 }
 
