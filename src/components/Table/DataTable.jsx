@@ -78,7 +78,7 @@ class DataTable extends React.Component {
                 deleteButtonDisabled = selectedRowKeys.length === 0 ? true : false;
                 editRowButtonDisabled = selectedRowKeys.length === 1 ? false : true;
 
-                // 当selectedRowKey为1时表示可以编辑
+                // 当selectedRowKeys长度为1时表示可以编辑
                 const selectedRowKey = selectedRowKeys.length === 1 ? selectedRowKeys[0] : -1;
                 if (selectedRowKey !== -1) {
                     const targetIndex = findIndex(this.props.dataSource, { id: selectedRowKey });

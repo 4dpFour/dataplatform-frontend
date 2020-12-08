@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import * as dataTableActions from '../../redux/actions/dataTable';
 
 // Ant Design组件库
-import { Form, Modal, Input, DatePicker, InputNumber, message } from 'antd';
+import { Form, Modal, Input, DatePicker, InputNumber, message, Select } from 'antd';
 
 // Util
 import moment from 'moment';
@@ -18,6 +18,8 @@ import * as serverActions from '../../utils/network';
 // Constants
 import urls from '../../constants/urls';
 import messageType from '../../constants/messageType';
+
+const { Option } = Select;
 
 class InfoEditor extends React.Component {
 
@@ -29,7 +31,7 @@ class InfoEditor extends React.Component {
         // 初始状态
         this.state = {
             // 表单值
-            url: '无',
+            url: this.props.selectedRowData.url ? this.props.selectedRowData.url : '中国政府采购网',
             contractNo: '无',
             contractName: '无',
             projectNo: '无',
@@ -43,6 +45,11 @@ class InfoEditor extends React.Component {
             contractValue: 0,
             announceDate: this.getFormattedDate(),
         }
+    }
+
+    // 来源网站的选择框值变化时触发的回调
+    onUrlSelectionChange = (value) => {
+        this.setState({ url: value });
     }
 
     // 确认
@@ -124,7 +131,7 @@ class InfoEditor extends React.Component {
     updateRow = (selectedRowKey) => {
         const ref = this.formRef.current;
         let selectedRowData = this.props.selectedRowData;
-        selectedRowData = {
+        const updatedRowData = {
             id: selectedRowData.id,
             url: selectedRowData.url,
             contractNo: ref.getFieldValue('contractNo') ? ref.getFieldValue('contractNo') : selectedRowData.contractNo,
@@ -143,7 +150,7 @@ class InfoEditor extends React.Component {
 
         const loading = message.loading(messageType.Loading.UPDATING_DATA, 0);
 
-        this.props.serverActions.updateRow(urls.update_row + `/${selectedRowData.id}`, selectedRowData)
+        this.props.serverActions.updateRow(urls.update_row + `/${selectedRowData.id}`, updatedRowData)
             .then(resp => {
                 setTimeout(loading, 1);
                 return resp.data;
@@ -154,8 +161,8 @@ class InfoEditor extends React.Component {
                     return;
                 } else {
                     message.success(messageType.Success.UPDATE_DATA_OK, 1.0);
-                    this.props.dataTableActions.updateRow(selectedRowKey, selectedRowData);
-                    this.props.updateSelectedRowData(selectedRowData);
+                    this.props.dataTableActions.updateRow(selectedRowKey, updatedRowData);
+                    this.props.updateSelectedRowData(updatedRowData);
                 }
             })
             .catch(() => {
@@ -242,7 +249,20 @@ class InfoEditor extends React.Component {
                             layout="vertical"
                             onValuesChange={this.onValuesChange}>
                             <Form.Item label="来源网址" name='url'>
-                                <Input defaultValue={selectedRowData.url} />
+                                <Input.Group>
+                                    <Select
+                                        style={{ width: '100%' }}
+                                        defaultValue={selectedRowData.url ? selectedRowData.url : this.props.urls[0]}
+                                        onChange={this.onUrlSelectionChange} >
+                                        {this.props.urls.map(url => {
+                                            return (
+                                                <Option value={url}>
+                                                    {url}
+                                                </Option>
+                                            )
+                                        })}
+                                    </Select>
+                                </Input.Group>
                             </Form.Item>
                             <Form.Item label="合同编号" name='contractNo'>
                                 <Input defaultValue={selectedRowData.contractNo} />
@@ -272,10 +292,14 @@ class InfoEditor extends React.Component {
                                 <Input defaultValue={selectedRowData.subjectName} />
                             </Form.Item>
                             <Form.Item label="主要标的单价" name='subjectUnitPrice'>
-                                <InputNumber defaultValue={selectedRowData.subjectUnitPrice ? selectedRowData.subjectUnitPrice : 0} />
+                                <InputNumber
+                                    style={{ width: '25%' }}
+                                    defaultValue={selectedRowData.subjectUnitPrice ? selectedRowData.subjectUnitPrice : 0} />
                             </Form.Item>
                             <Form.Item label="合同金额" name='contractValue'>
-                                <InputNumber defaultValue={selectedRowData.contractValue ? selectedRowData.contractValue : 0} />
+                                <InputNumber
+                                    style={{ width: '25%' }}
+                                    defaultValue={selectedRowData.contractValue ? selectedRowData.contractValue : 0} />
                             </Form.Item>
                             <Form.Item label="合同公告日期" name='annouceDate'>
                                 <DatePicker
@@ -290,6 +314,12 @@ class InfoEditor extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        urls: state.urlConfig.urls
+    }
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         dataTableActions: bindActionCreators(dataTableActions, dispatch),
@@ -297,4 +327,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(InfoEditor);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoEditor);
