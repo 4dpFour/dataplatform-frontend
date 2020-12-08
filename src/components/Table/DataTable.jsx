@@ -185,8 +185,12 @@ class DataTable extends React.Component {
 
     // 添加行
     onClickAddRowButton = () => {
-        // 弹出编辑框
-        this.setState({ infoEditorVisible: true });
+        if (this.props.urls.length == 0) {
+            message.warning(messageType.Warning.NEED_URL_CONFIG, 1.0);
+        } else {
+            // 弹出编辑框
+            this.setState({ infoEditorVisible: true });
+        }
     }
 
     // 编辑行
@@ -476,7 +480,8 @@ const mapStateToProps = (state) => {
         dataSource: state.dataTable.dataSource,
         queriedDataSource: state.dataTable.queriedDataSource,
         bordered: state.dataTable.bordered,
-        layout: state.dataTable.layout
+        layout: state.dataTable.layout,
+        urls: state.urlConfig.urls
     }
 }
 

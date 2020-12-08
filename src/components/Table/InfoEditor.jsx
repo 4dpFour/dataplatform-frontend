@@ -31,7 +31,7 @@ class InfoEditor extends React.Component {
         // 初始状态
         this.state = {
             // 表单值
-            url: this.props.selectedRowData.url ? this.props.selectedRowData.url : '中国政府采购网',
+            url: this.props.selectedRowData.url ? this.props.selectedRowData.url : this.props.urls[0],
             contractNo: '无',
             contractName: '无',
             projectNo: '无',

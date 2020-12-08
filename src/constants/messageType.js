@@ -19,7 +19,8 @@ const messageType = {
     Warning: {
         // 数据存取相关
         DATA_NOT_FOUND: '未发现数据！',
-        QUERY_DATA_NOT_FOUND: '结果为空！'
+        QUERY_DATA_NOT_FOUND: '结果为空！',
+        NEED_URL_CONFIG: '尚未进行网址配置，无法添加！'
     },
     Error: {
         ERROR_HAPPEN: '发生错误！',
