@@ -41,6 +41,7 @@ const messageType = {
         // 用户相关
         LOGGING_IN: '登录中...',
         REGISTERING: '注册中...',
+        LOGGING_OUT: '退出中...',
         // 数据存取相关
         FETCHING_DATA: '获取数据中...',
         CRAWLING_DATA: '正在爬取数据中...',

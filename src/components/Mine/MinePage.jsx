@@ -47,8 +47,12 @@ class MinePage extends React.Component {
 
     // 点击菜单栏触发的回调
     onClickMenuItem = () => {
+        const loading = message.loading(messageType.Loading.LOGGING_OUT, 0);
         this.props.serverActions.logoutRequest(urls.user_logout)
-            .then(resp => resp.data)
+            .then(resp => {
+                setTimeout(loading, 1);
+                return resp.data;
+            })
             .then(data => {
                 // 退出成功
                 if (data.code == 200) {
@@ -64,6 +68,7 @@ class MinePage extends React.Component {
                 };
             })
             .catch(err => {
+                setTimeout(loading, 1);
                 message.error(messageType.Error.ERROR_HAPPEN, 1.0);
                 // 发生错误时还是要退出
                 this.props.authActions.logout();
