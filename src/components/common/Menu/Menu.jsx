@@ -126,7 +126,10 @@ class DPMenu extends React.Component {
                     {
                         this.menuItems.map(item => {
                             return (
-                                <Menu.Item key={item.title} icon={item.icon}>
+                                <Menu.Item 
+                                    key={item.title} 
+                                    icon={item.icon}
+                                    style={{textAlign: 'center'}}>
                                     {/* 链接 */}
                                     <Link to={item.link}>{item.title}</Link>
                                 </Menu.Item>
