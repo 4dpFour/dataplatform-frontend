@@ -7,6 +7,7 @@ const DataTableAction = ActionType.dataTable;
 const initialState = {
     dataSource: [],
     queriedDataSource: [],
+    backupDataSource: [],
     bordered: false,
     layout: 'fixed'
 }
@@ -27,23 +28,35 @@ const dataTableReducer = (state = initialState, action) => {
                 dataSource: [
                     ...state.dataSource,
                     action.data
+                ],
+                queriedDataSource: [
+                    ...state.queriedDataSource,
+                    action.data
                 ]
             }
 
         // 3. 更新行
         case DataTableAction.UPDATE_ROW:
             let selectedRowKey = action.selectedRowKey;
-            const targetIndex = findIndex(state.dataSource, { id: selectedRowKey });
-            if (targetIndex >= 0) {
+            const dataSourceTargetIndex = findIndex(state.dataSource, { id: selectedRowKey });
+            const queriedDataSourceTargetIndex = findIndex(state.queriedDataSource, { id: selectedRowKey });
+
+            if (dataSourceTargetIndex >= 0 && queriedDataSourceTargetIndex >= 0) {
                 const newDataSource = [
-                    ...state.dataSource.slice(0, targetIndex),
+                    ...state.dataSource.slice(0, dataSourceTargetIndex),
                     action.data,
-                    ...state.dataSource.slice(targetIndex + 1)
+                    ...state.dataSource.slice(dataSourceTargetIndex + 1)
+                ]
+                const newQueriedDataSource = [
+                    ...state.queriedDataSource.slice(0, queriedDataSourceTargetIndex),
+                    action.data,
+                    ...state.queriedDataSource.slice(queriedDataSourceTargetIndex + 1)
                 ]
 
                 return {
                     ...state,
-                    dataSource: newDataSource
+                    dataSource: newDataSource,
+                    queriedDataSource: newQueriedDataSource
                 }
             }
             return state
@@ -66,9 +79,23 @@ const dataTableReducer = (state = initialState, action) => {
                 }
             });
 
+            let newQueriedDataSource = state.queriedDataSource.filter(item => {
+                // 判断item的id是否在keys中
+                let targetIndex = findIndex(selectedRowKeys, (val) => {
+                    return val == item.id;
+                });
+
+                if (targetIndex == -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
             return {
                 ...state,
-                dataSource: newDataSource
+                dataSource: newDataSource,
+                queriedDataSource: newQueriedDataSource
             }
 
         // 5. 切换表格边框状态
