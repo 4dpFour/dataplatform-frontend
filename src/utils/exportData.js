@@ -1,6 +1,9 @@
+import { defaultColumns } from '../constants/table';
+
 const formatData = (header, data) => {
     const rows = data.map(item => {
         return [
+            item.url,
             item.contractNo,
             item.contractName,
             item.projectNo,
@@ -20,13 +23,7 @@ const formatData = (header, data) => {
 };
 
 export const exportData = (dataSource) => {
-    const header = [
-        '合同编号', '合同名称',
-        '项目编号', '项目名称',
-        '采购人(甲方)', '采购人联系电话',
-        '供应商(乙方)', '供应商联系电话',
-        '主要标的名称', '主要标的单价',
-        '合同金额', '合同公告日期',];
+    const header = defaultColumns.map(item => item.title);
 
     const data = formatData(header, dataSource);
 
