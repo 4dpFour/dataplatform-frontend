@@ -400,6 +400,12 @@ class DataTable extends React.Component {
                         <Button
                             type='default'
                             style={{ marginRight: 5 }}
+                            onClick={this.refetchData}>
+                            刷新
+                        </Button>
+                        <Button
+                            type='default'
+                            style={{ marginRight: 5 }}
                             onClick={this.onClickCrawlButton}>
                             爬取
                         </Button>
