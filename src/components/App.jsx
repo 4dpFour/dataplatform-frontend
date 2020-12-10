@@ -9,7 +9,7 @@ import * as routes from "../routes";
 import { BrowserRouter as Router } from "react-router-dom";
 
 // 自定义组件
-import DPMenu from './common/DPMenu/DPMenu';
+import Menu from './common/Menu/Menu';
 import AdminPage from './Admin/AdminPage';
 
 // 组件库 & css
@@ -29,7 +29,7 @@ class App extends React.Component {
                 <Router routes={routes.userRoutes}>
                     <Layout style={{ minHeight: '100vh' }}>
                         {/* 左侧菜单栏 */}
-                        <DPMenu />
+                        <Menu />
                         {/* 右侧内容 */}
                         <Layout className="site-layout">
                             {/* 内容 */}
