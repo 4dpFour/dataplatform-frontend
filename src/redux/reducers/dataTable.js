@@ -1,5 +1,5 @@
 import ActionType from '../../constants/actionType';
-import { findIndex } from 'lodash';
+import { updateRow, deleteRows } from '../../utils/dataTable';
 
 const DataTableAction = ActionType.dataTable;
 
@@ -38,64 +38,22 @@ const dataTableReducer = (state = initialState, action) => {
         // 3. 更新行
         case DataTableAction.UPDATE_ROW:
             let selectedRowKey = action.selectedRowKey;
-            const dataSourceTargetIndex = findIndex(state.dataSource, { id: selectedRowKey });
-            const queriedDataSourceTargetIndex = findIndex(state.queriedDataSource, { id: selectedRowKey });
 
-            if (dataSourceTargetIndex >= 0 && queriedDataSourceTargetIndex >= 0) {
-                const newDataSource = [
-                    ...state.dataSource.slice(0, dataSourceTargetIndex),
-                    action.data,
-                    ...state.dataSource.slice(dataSourceTargetIndex + 1)
-                ]
-                const newQueriedDataSource = [
-                    ...state.queriedDataSource.slice(0, queriedDataSourceTargetIndex),
-                    action.data,
-                    ...state.queriedDataSource.slice(queriedDataSourceTargetIndex + 1)
-                ]
-
-                return {
-                    ...state,
-                    dataSource: newDataSource,
-                    queriedDataSource: newQueriedDataSource
-                }
+            return {
+                ...state,
+                dataSource: updateRow(state.dataSource, selectedRowKey, action.data),
+                queriedDataSource: updateRow(state.queriedDataSource, selectedRowKey, action.data)
             }
-            return state
 
         // 4. 删除行
         case DataTableAction.DELETE_ROWS:
             // 需要删除的行的keys
             let selectedRowKeys = action.selectedRowKeys;
 
-            let newDataSource = state.dataSource.filter(item => {
-                // 判断item的id是否在keys中
-                let targetIndex = findIndex(selectedRowKeys, (val) => {
-                    return val == item.id;
-                });
-
-                if (targetIndex == -1) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-
-            let newQueriedDataSource = state.queriedDataSource.filter(item => {
-                // 判断item的id是否在keys中
-                let targetIndex = findIndex(selectedRowKeys, (val) => {
-                    return val == item.id;
-                });
-
-                if (targetIndex == -1) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-
             return {
                 ...state,
-                dataSource: newDataSource,
-                queriedDataSource: newQueriedDataSource
+                dataSource: deleteRows(state.dataSource, selectedRowKeys),
+                queriedDataSource: deleteRows(state.queriedDataSource, selectedRowKeys)
             }
 
         // 5. 切换表格边框状态
