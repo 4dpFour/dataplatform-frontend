@@ -219,7 +219,9 @@ class DataTable extends React.Component {
             .then(data => {
                 if (data.code === 200) {
                     const increment = data.data.increment;
-                    this.props.dashboardActions.setIncrement(increment);
+                    this.props.dataTableActions.setIncrement(increment);
+                    // 将increment按照存到本地
+                    localStorage.setItem(`${this.props.username}-increment`, increment);
                     message.success(messageType.Success.CRAWL_DATA_OK(increment), 1.0);
                     // 重新向服务器请求数据
                     this.refetchData();
@@ -472,7 +474,8 @@ const mapStateToProps = (state) => {
         queriedDataSource: state.dataTable.queriedDataSource,
         bordered: state.dataTable.bordered,
         layout: state.dataTable.layout,
-        urls: state.urlConfig.urls
+        urls: state.urlConfig.urls,
+        username: state.auth.username
     }
 }
 

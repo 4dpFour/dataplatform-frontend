@@ -3,13 +3,21 @@ import { updateRow, deleteRows } from '../../utils/dataTable';
 
 const DataTableAction = ActionType.dataTable;
 
+const initialIncrement = () => {
+    const key = `${localStorage.getItem('username')}-increment`;
+    const value = localStorage.getItem(key);
+    if (value) return value;
+    else return 0;
+}
+
 // 初始状态
 const initialState = {
     dataSource: [],
     queriedDataSource: [],
     backupDataSource: [],
     bordered: false,
-    layout: 'fixed'
+    layout: 'fixed',
+    increment: initialIncrement()
 }
 
 const dataTableReducer = (state = initialState, action) => {
@@ -75,6 +83,13 @@ const dataTableReducer = (state = initialState, action) => {
             return {
                 ...state,
                 queriedDataSource: action.data
+            }
+
+        // 8. 设置新爬取的条目数
+        case DataTableAction.SET_INCREMENT:
+            return {
+                ...state,
+                increment: action.increment
             }
 
         // 8. 清空

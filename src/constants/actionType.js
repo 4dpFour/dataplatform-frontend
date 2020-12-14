@@ -13,9 +13,10 @@ const ActionType = {
         ADD_ROW: 'ADD_ROW',
         UPDATE_ROW: 'UPDATE_ROW',
         DELETE_ROWS: 'DELETE_ROWS',
+        SET_INCREMENT: 'SET_INCREMENT',
         // 表格样式相关
         TOGGLE_BORDER: 'TOGGLE_BORDER',
-        TOGGLE_LAYOUT: 'TOGGLE_LAYOUT'
+        TOGGLE_LAYOUT: 'TOGGLE_LAYOUT',
     },
     // 用户相关
     auth: {
@@ -32,7 +33,6 @@ const ActionType = {
     // 数据看板相关
     dashboard: {
         CLEAR: 'CLEAR',
-        SET_INCREMENT: 'SET_INCREMENT',
         SET_AVG_VALUE: 'SET_AVG_VALUE',
     }
 }

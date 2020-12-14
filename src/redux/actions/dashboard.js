@@ -10,14 +10,6 @@ export const setAvgValue = (avgValue) => {
     }
 }
 
-// Action: 设置今日新增条目数
-export const setIncrement = (increment) => {
-    return {
-        type: DashboardAction.SET_INCREMENT,
-        increment
-    }
-}
-
 // Action: 清除数据
 export const clear = () => {
     return {

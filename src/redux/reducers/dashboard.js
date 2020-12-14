@@ -17,14 +17,7 @@ const dashboardReducer = (state = initialState, action) => {
                 avgValue: action.avgValue
             }
 
-        // 2. 设置今日新增
-        case DashboardAction.SET_INCREMENT:
-            return {
-                ...state,
-                increment: action.increment
-            }
-
-        // 3. 清空数据
+        // 2. 清空数据
         case DashboardAction.CLEAR:
             return initialState
 

@@ -96,7 +96,7 @@ class InfoCardContainer extends React.Component {
 const mapStateToProps = (state) => {
     return {
         totalRowNumber: state.dataTable.dataSource.length,
-        increment: state.dashboard.increment,
+        increment: state.dataTable.increment,
         user: state.auth.username,
         urlNumber: state.urlConfig.urls.length
     }

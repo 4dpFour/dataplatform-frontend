@@ -64,3 +64,11 @@ export const clear = () => {
         type: DataTableAction.CLEAR
     }
 }
+
+// Action: 设置新爬取的条目数
+export const setIncrement = (increment) => {
+    return {
+        type: DataTableAction.SET_INCREMENT,
+        increment
+    }
+}
