@@ -16,7 +16,7 @@ import * as urlConfigActions from '../../redux/actions/urlConfig';
 // Ant Design组件库
 import 'antd/dist/antd.css';
 import { SettingOutlined } from '@ant-design/icons';
-import { Row, Col, Card, Avatar, Dropdown, Menu, Button, message } from "antd";
+import { Row, Col, Card, Avatar, Dropdown, Menu, message } from "antd";
 
 // Util
 import urls from '../../constants/urls';
@@ -30,14 +30,11 @@ const { Meta } = Card;
 
 class LoggedIn extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     onClickMenuItem = ({ key }) => {
         switch (key) {
             case 'logout':
                 this.logout();
+                break;
 
             default:
                 break
@@ -54,7 +51,7 @@ class LoggedIn extends React.Component {
             })
             .then(data => {
                 // 退出成功
-                if (data.code == 200) {
+                if (data.code === 200) {
                     this.props.authActions.logout();
                     // 清除相关信息
                     this.clearUserInfo();

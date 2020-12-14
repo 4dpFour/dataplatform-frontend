@@ -4,10 +4,10 @@ export const deleteRows = (dataSource, selectedRowKeys) => {
     return dataSource.filter(item => {
         // 判断item的id是否在keys中
         let targetIndex = findIndex(selectedRowKeys, (val) => {
-            return val == item.id;
+            return val === item.id;
         });
 
-        if (targetIndex == -1) {
+        if (targetIndex === -1) {
             return true;
         } else {
             return false;

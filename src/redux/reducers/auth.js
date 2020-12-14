@@ -9,7 +9,7 @@ const initialState = () => {
     const password = localStorage.getItem('password');
 
     return {
-        loggedIn: cookie == null ? false : true,
+        loggedIn: cookie === null ? false : true,
         username, password, cookie
     }
 }

@@ -2,7 +2,7 @@ import { uniq, findIndex } from 'lodash';
 
 // 柱状图
 export const barData = (dataSource) => {
-    if (dataSource.length == 0) return [];
+    if (dataSource.length === 0) return [];
 
     // 来源网站
     let sources = dataSource.map(item => item.url);
@@ -22,7 +22,7 @@ export const barData = (dataSource) => {
 
 // 折线图
 export const lineData = (dataSource) => {
-    if (dataSource.length == 0) return [];
+    if (dataSource.length === 0) return [];
 
     // 日期的正则表达式
     // 格式：YYYY-MM-DD

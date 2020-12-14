@@ -58,7 +58,7 @@ class InfoEditor extends React.Component {
         const { selectedRowKey } = this.props;
 
         // 添加行
-        if (selectedRowKey == -1) {
+        if (selectedRowKey === -1) {
             this.addRow();
         }
         // 更新行
@@ -105,7 +105,7 @@ class InfoEditor extends React.Component {
                 return resp.data;
             })
             .then(data => {
-                if (data.code != 200) {
+                if (data.code !== 200) {
                     message.warning(messageType.Error.ADD_DATA_FAIL, 1.0);
                     return;
                 } else {
@@ -114,7 +114,7 @@ class InfoEditor extends React.Component {
                 }
             })
             .then(data => {
-                if (data != null) {
+                if (data !== null) {
                     // 把返回的data添加到store中
                     this.props.dataTableActions.addRow(data);
                 }

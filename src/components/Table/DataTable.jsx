@@ -71,7 +71,7 @@ class DataTable extends React.Component {
                 }
 
                 // 当selectedRowKeys长度为0时清空selectedRowData
-                if (selectedRowKeys.length == 0) {
+                if (selectedRowKeys.length === 0) {
                     this.setState({ selectedRowData: {} });
                 }
 
@@ -96,7 +96,7 @@ class DataTable extends React.Component {
         const len = this.props.dataSource.length;
 
         // 没有数据则向服务端请求数据
-        if (len == 0) {
+        if (len === 0) {
             const loading = message.loading(messageType.Loading.FETCHING_DATA, 0);
 
             this.props.serverActions.fetchData(urls.contract_list)
@@ -105,7 +105,7 @@ class DataTable extends React.Component {
                     return resp.data;
                 })
                 .then(data => {
-                    if (data.code != 200) {
+                    if (data.code !== 200) {
                         message.warning(messageType.Warning.DATA_NOT_FOUND, 1.0);
                         return;
                     } else {
@@ -115,7 +115,7 @@ class DataTable extends React.Component {
                     }
                 })
                 .then(data => {
-                    if (data != null) {
+                    if (data !== null) {
                         // 把请求到的数据填入到store中
                         this.props.dataTableActions.fetchData(data);
                     }
@@ -137,7 +137,7 @@ class DataTable extends React.Component {
                 return resp.data;
             })
             .then(data => {
-                if (data.code != 200) {
+                if (data.code !== 200) {
                     message.warning(messageType.Warning.DATA_NOT_FOUND, 1.0);
                     return;
                 } else {
@@ -147,7 +147,7 @@ class DataTable extends React.Component {
                 }
             })
             .then(data => {
-                if (data != null) {
+                if (data !== null) {
                     // 把请求到的数据填入到store中
                     this.props.dataTableActions.fetchData(data);
                 }
@@ -170,7 +170,7 @@ class DataTable extends React.Component {
 
     // 添加行
     onClickAddRowButton = () => {
-        if (this.props.urls.length == 0) {
+        if (this.props.urls.length === 0) {
             message.warning(messageType.Warning.NEED_URL_CONFIG, 1.0);
         } else {
             // 弹出编辑框
@@ -217,7 +217,7 @@ class DataTable extends React.Component {
                 return resp.data;
             })
             .then(data => {
-                if (data.code == 200) {
+                if (data.code === 200) {
                     const increment = data.data.increment;
                     this.props.dashboardActions.setIncrement(increment);
                     message.success(messageType.Success.CRAWL_DATA_OK(increment), 1.0);
@@ -251,7 +251,7 @@ class DataTable extends React.Component {
             })
             .then(data => {
                 // 成功删除
-                if (data.code == 200) {
+                if (data.code === 200) {
                     message.success(messageType.Success.DELETE_DATA_OK, 1.0);
                     this.props.dataTableActions.deleteRows(selectedRowKeys);
 
@@ -311,7 +311,7 @@ class DataTable extends React.Component {
             })
             .then(data => {
                 // 查询到
-                if (data.code == 200) {
+                if (data.code === 200) {
                     message.success(messageType.Success.QUERY_DATA_OK, 1.0);
                     return data.data;
                 }

@@ -23,10 +23,6 @@ class RegisterForm extends React.Component {
 
     formRef = React.createRef();
 
-    constructor(props) {
-        super(props);
-    }
-
     // 点击注册按钮触发的回调
     onClickRegisterButton = () => {
         const ref = this.formRef.current;
@@ -54,7 +50,7 @@ class RegisterForm extends React.Component {
             .then(data => {
                 setTimeout(loading, 1);
                 // 注册成功
-                if (data.code == 200) {
+                if (data.code === 200) {
                     message.success(messageType.Success.REGISTER_OK, 1.0);
 
                     const cookie = document.cookie.split('=')[1];

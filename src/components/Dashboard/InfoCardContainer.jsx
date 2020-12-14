@@ -35,7 +35,7 @@ class InfoCardContainer extends React.Component {
         this.props.serverActions.getUrls(urls.url_list)
             .then(resp => resp.data)
             .then(data => {
-                if (data.code == 200) return data.data;
+                if (data.code === 200) return data.data;
                 else return;
             })
             .then(data => {

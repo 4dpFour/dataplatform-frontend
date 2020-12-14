@@ -36,10 +36,6 @@ const columns = [
 
 class MiniTable extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.fetchData();
     }
@@ -49,7 +45,7 @@ class MiniTable extends React.Component {
         const len = this.props.dataSource.length;
 
         // 没有数据则向服务端请求数据
-        if (len == 0) {
+        if (len === 0) {
             const loading = message.loading(messageType.Loading.FETCHING_DATA, 0);
 
             this.props.serverActions.fetchData(urls.contract_list)
@@ -58,7 +54,7 @@ class MiniTable extends React.Component {
                     return resp.data;
                 })
                 .then(data => {
-                    if (data.code != 200) {
+                    if (data.code !== 200) {
                         message.warning(messageType.Warning.DATA_NOT_FOUND, 1.0);
                         return;
                     } else {
@@ -98,10 +94,9 @@ class MiniTable extends React.Component {
                         title={() => '最近5条数据'}
                         bordered
                         tableLayout='fixed'
-                        pagination={{ pageSize: 5 }}
+                        pagination={false}
                         scroll={{ x: '200vw' }}
                         columns={tableColumns}
-                        pagination={false}
                         dataSource={dataSource} />
                 </Col>
             </Row>

@@ -23,10 +23,6 @@ class LoginForm extends React.Component {
 
     formRef = React.createRef();
 
-    constructor(props) {
-        super(props);
-    }
-
     // 点击登录按钮触发的回调
     onClickLoginButton = () => {
         const ref = this.formRef.current;
@@ -49,7 +45,7 @@ class LoginForm extends React.Component {
             .then(data => {
                 setTimeout(loading, 1);
                 // 登录成功
-                if (data.code == 200) {
+                if (data.code === 200) {
                     message.success(messageType.Success.LOGIN_OK, 1.0);
 
                     const cookie = document.cookie.split('=')[1];

@@ -52,7 +52,7 @@ class UrlConfigForm extends React.Component {
 
     // 点击保存按钮触发的回调
     onClickSaveButton = () => {
-        if (this.props.selectedUrls.length == 0) {
+        if (this.props.selectedUrls.length === 0) {
             message.warning(messageType.Warning.EMPTY_URL_CONFIG, 1.0);
             return;
         }
@@ -71,7 +71,7 @@ class UrlConfigForm extends React.Component {
                 return resp.data;
             })
             .then(data => {
-                if (data.code == 200) {
+                if (data.code === 200) {
                     message.success(messageType.Success.SAVE_URLS_OK, 1.0);
                     this.props.urlConfigActions.saveUrls(sources);
                 } else {
@@ -94,7 +94,7 @@ class UrlConfigForm extends React.Component {
                     let matchSources = [];
                     const sources = reader.result.split('\n').filter(item => item != "");
                     sources.forEach(item => {
-                        if (findIndex(urlConfigContant.defaultSources, val => val == item) != -1) {
+                        if (findIndex(urlConfigContant.defaultSources, val => val === item) != -1) {
                             matchSources.push(item);
                         }
                     });
