@@ -72,3 +72,11 @@ export const setIncrement = (increment) => {
         increment
     }
 }
+
+// Action: 设置表格每页显示的条目数
+export const setPageSize = (size) => {
+    return {
+        type: DataTableAction.SET_PAGESIZE,
+        size
+    }
+}

@@ -17,6 +17,7 @@ const ActionType = {
         // 表格样式相关
         TOGGLE_BORDER: 'TOGGLE_BORDER',
         TOGGLE_LAYOUT: 'TOGGLE_LAYOUT',
+        SET_PAGESIZE: 'SET_PAGESIZE'
     },
     // 用户相关
     auth: {

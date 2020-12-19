@@ -17,6 +17,7 @@ const initialState = {
     backupDataSource: [],
     bordered: false,
     layout: 'fixed',
+    pageSize: 10,
     increment: initialIncrement()
 }
 
@@ -92,7 +93,14 @@ const dataTableReducer = (state = initialState, action) => {
                 increment: action.increment
             }
 
-        // 8. 清空
+        // 9. 设置表格每页条目数
+        case DataTableAction.SET_PAGESIZE:
+            return {
+                ...state,
+                pageSize: action.size
+            }
+
+        // 10. 清空
         case DataTableAction.CLEAR:
             return initialState
 

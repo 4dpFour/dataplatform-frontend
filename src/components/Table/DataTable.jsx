@@ -47,7 +47,9 @@ class DataTable extends React.Component {
             infoEditorVisible: false,
             selectedRowData: {},
             // 输入框相关
-            isQuerying: false
+            isQuerying: false,
+            // 表格每页显示条数
+            pageSize: 10
         };
 
         // 选中行时触发
@@ -334,6 +336,11 @@ class DataTable extends React.Component {
             });
     }
 
+    // 改变每页显示的条目数时触发的回调
+    onShowSizeChange = (current, size) => {
+        this.props.dataTableActions.setPageSize(size);
+    }
+
     render() {
         const { addButtonDisabled, editRowButtonDisabled, deleteButtonDisabled, isQuerying } = this.state;
         const { bordered } = this.props;
@@ -439,7 +446,7 @@ class DataTable extends React.Component {
                 <Table
                     bordered={this.props.bordered}
                     tableLayout={this.props.layout}
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: this.props.pageSize, onShowSizeChange: this.onShowSizeChange}}
                     scroll={{ x: '200vw' }}
                     rowSelection={this.rowSelection}
                     columns={tableColumns}
@@ -475,7 +482,8 @@ const mapStateToProps = (state) => {
         bordered: state.dataTable.bordered,
         layout: state.dataTable.layout,
         urls: state.urlConfig.urls,
-        username: state.auth.username
+        username: state.auth.username,
+        pageSize: state.dataTable.pageSize
     }
 }
 
