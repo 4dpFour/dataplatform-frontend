@@ -16,11 +16,11 @@ class AdminPage extends React.Component {
                 <Layout style={{ minHeight: "100vh" }}>
                     <Row style={{ minHeight: 200 }} />
                     <Row>
-                        <Col span={9}></Col>
-                        <Col span={6}>
+                        <Col flex={8}></Col>
+                        <Col flex={1}>
                             {routes.guestRoutes}
                         </Col>
-                        <Col span={9}></Col>
+                        <Col flex={8}></Col>
                     </Row>
                     <Row style={{ minHeight: 200 }} />
                 </Layout>

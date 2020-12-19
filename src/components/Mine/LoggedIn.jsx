@@ -96,8 +96,8 @@ class LoggedIn extends React.Component {
                     <Col span={24}></Col>
                 </Row>
                 <Row>
-                    <Col span={9}></Col>
-                    <Col span={8}>
+                    <Col flex={3}></Col>
+                    <Col flex={1}>
                         <Card
                             style={{ width: 300 }}
                             cover={<img alt="example" src={background} />}
@@ -111,7 +111,7 @@ class LoggedIn extends React.Component {
                                 description='系统管理员' />
                         </Card>
                     </Col>
-                    <Col span={7}></Col>
+                    <Col flex={2}></Col>
                 </Row>
                 <Row>
                     <Col span={24}></Col>
