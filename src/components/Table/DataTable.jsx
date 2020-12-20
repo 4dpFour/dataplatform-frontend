@@ -117,11 +117,11 @@ class DataTable extends React.Component {
                     }
                 })
                 .then(data => {
-                    if (data !== null) {
+                    if (data !== null && data.length > 0) {
                         // 把请求到的数据填入到store中
                         this.props.dataTableActions.fetchData(data);
                     }
-                })
+                }) 
                 .catch(err => {
                     setTimeout(loading, 1);
                     message.error(messageType.Error.ERROR_HAPPEN);
