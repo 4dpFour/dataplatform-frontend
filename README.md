@@ -48,4 +48,6 @@ npm start
 
 ![1.png](./images/preview-1.png)
 ![2.png](./images/preview-2.png)
+![3.png](./images/preview-3.png)
+![4.png](./images/preview-4.png)
 
